@@ -1,0 +1,16 @@
+export const images = {
+  arrow_left: require('./Images/arrow_left.png'),
+  course_blue_icon: require('./Images/course_blue_icon.png'),
+  course_white_icon: require('./Images/course_white_icon.png'),
+  about_us: require('./Images/about_us.png'),
+  instructioi: require('./Images/instructioi.png'),
+  terms_of_service: require('./Images/terms_of_service.png'),
+  drawer: require('./Images/drawer.png'),
+  submit_your_rating: require('./Images/submit_your_rating.png'),
+  share: require('./Images/share.png'),
+  notification: require('./Images/notification.png'),
+  language: require('./Images/language.png'),
+  correct: require('./Images/correct.png'),
+  privacy_policy: require('./Images/privacy_policy.png'),
+  contact_us: require('./Images/contact_us.png'),
+};

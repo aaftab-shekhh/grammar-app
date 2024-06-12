@@ -3,11 +3,12 @@ import {ScrollView, StyleSheet, View} from 'react-native';
 import CourseListing from '../components/list/CourseListing';
 import ImageSlider from '../components/list/ImageSlider';
 import CommonHead from '../components/styles/CommonHead';
+import {images} from '../assets';
 
 const Home = () => {
   return (
     <View style={styles.root}>
-      <CommonHead />
+      <CommonHead leftIcon={images.drawer} rightIcon={images.language} />
       <ScrollView
         contentContainerStyle={styles.list}
         showsVerticalScrollIndicator={false}>

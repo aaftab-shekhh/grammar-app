@@ -4,15 +4,42 @@ import {colors} from '../../constants/colors';
 import LinearGradient from 'react-native-linear-gradient';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import Font400 from '../font/Font400';
+import FastImage from 'react-native-fast-image';
 
-const CommonHead = () => {
+const CommonHead = props => {
+  const {rightIcon, leftIcon, onPressRight, onPressLeft, leftIconStyle} = props;
+
   const {top} = useSafeAreaInsets();
   return (
     <View style={[styles.root, {height: top + 78, paddingTop: top}]}>
       <View style={styles.container}>
-        <Pressable style={styles.button}></Pressable>
+        {leftIcon ? (
+          <Pressable
+            onPress={onPressLeft}
+            style={[styles.button, styles.leftButton]}>
+            <FastImage
+              style={[styles.icon, leftIconStyle]}
+              source={leftIcon}
+              resizeMode="contain"
+            />
+          </Pressable>
+        ) : (
+          <></>
+        )}
         <Font400 style={styles.title}>{'Englivia'}</Font400>
-        <Pressable style={styles.button}></Pressable>
+        {rightIcon ? (
+          <Pressable
+            onPress={onPressRight}
+            style={[styles.button, styles.rightButton]}>
+            <FastImage
+              style={[styles.icon, rightIcon]}
+              source={rightIcon}
+              resizeMode="contain"
+            />
+          </Pressable>
+        ) : (
+          <></>
+        )}
       </View>
       <LinearGradient
         colors={['#ffffff', '#ffffff00']}
@@ -38,18 +65,25 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 20,
     backgroundColor: colors.color113251,
   },
-
-  button: {
-    height: 36,
-    width: 36,
-    borderRadius: 10,
-    backgroundColor: colors.color125A92,
-  },
   container: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+  },
+  button: {
+    width: 36,
+    height: 36,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: colors.color125A92,
+  },
+  rightButton: {position: 'absolute', right: 0},
+  leftButton: {position: 'absolute', left: 0},
+  icon: {
+    height: 24,
+    width: 24,
   },
   circle: {
     borderRadius: 50,
@@ -57,6 +91,8 @@ const styles = StyleSheet.create({
     position: 'absolute',
   },
   title: {
+    flex: 1,
+    textAlign: 'center',
     fontSize: 18,
     color: colors.white,
   },
