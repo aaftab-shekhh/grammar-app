@@ -8,7 +8,11 @@ import {images} from '../assets';
 const Home = () => {
   return (
     <View style={styles.root}>
-      <CommonHead leftIcon={images.drawer} rightIcon={images.language} />
+      <CommonHead
+        leftIcon={images.drawer}
+        rightIcon={images.language}
+        title={'Englivia'}
+      />
       <ScrollView
         contentContainerStyle={styles.list}
         showsVerticalScrollIndicator={false}>

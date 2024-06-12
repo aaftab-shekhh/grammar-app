@@ -1,16 +1,24 @@
-import {StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import {Pressable, StyleSheet, Text, View} from 'react-native';
+import React, {memo, useCallback} from 'react';
 import {deviceWidth} from '../../constants/constants';
 import {colors} from '../../constants/colors';
 import Font700 from '../font/Font700';
 import FastImage from 'react-native-fast-image';
 import {images} from '../../assets';
+import {useNavigation} from '@react-navigation/native';
+import {screens} from '../../constants/screens';
 
 const CourseItem = ({data}) => {
   const {title} = data;
 
+  const {navigate} = useNavigation();
+
+  const onNavigateSelect = useCallback(() => {
+    navigate(screens.SelectLevel);
+  }, [navigate]);
+
   return (
-    <View style={styles.root}>
+    <Pressable onPress={onNavigateSelect} style={styles.root}>
       <FastImage
         style={styles.iconStyle}
         source={images.course_blue_icon}
@@ -19,11 +27,11 @@ const CourseItem = ({data}) => {
       <Font700 numberOfLines={3} style={styles.title}>
         {title}
       </Font700>
-    </View>
+    </Pressable>
   );
 };
 
-export default CourseItem;
+export default memo(CourseItem);
 
 const styles = StyleSheet.create({
   root: {
@@ -32,12 +40,7 @@ const styles = StyleSheet.create({
     width: (deviceWidth - 16) / 3,
     backgroundColor: colors.white,
     height: (deviceWidth - 16) / 3,
-    borderColor: colors.transparent_white_10,
-    shadowOffset: {height: 2, width: 0},
-    shadowColor: colors.black,
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 1,
+    borderColor: colors.transparent_black_10,
   },
   iconStyle: {
     width: 41,

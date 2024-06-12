@@ -13,4 +13,6 @@ export const images = {
   correct: require('./Images/correct.png'),
   privacy_policy: require('./Images/privacy_policy.png'),
   contact_us: require('./Images/contact_us.png'),
+  imageQuestion: require('./Images/imageQusetion.png'),
+  arrow_right: require('./Images/arrow_right.png'),
 };

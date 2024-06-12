@@ -1,17 +1,27 @@
 import React, {memo} from 'react';
-import {Pressable, StyleSheet, Text, View} from 'react-native';
-import {colors} from '../../constants/colors';
+import {Pressable, StyleSheet, View} from 'react-native';
+import FastImage from 'react-native-fast-image';
 import LinearGradient from 'react-native-linear-gradient';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import Font400 from '../font/Font400';
-import FastImage from 'react-native-fast-image';
+import {colors} from '../../constants/colors';
+import Font700 from '../font/Font700';
 
 const CommonHead = props => {
-  const {rightIcon, leftIcon, onPressRight, onPressLeft, leftIconStyle} = props;
+  const {
+    rightIcon,
+    leftIcon,
+    onPressRight,
+    onPressLeft,
+    leftIconStyle,
+    title,
+    children,
+    extraHeight = 0,
+  } = props;
 
   const {top} = useSafeAreaInsets();
   return (
-    <View style={[styles.root, {height: top + 78, paddingTop: top}]}>
+    <View
+      style={[styles.root, {height: top + 78 + extraHeight, paddingTop: top}]}>
       <View style={styles.container}>
         {leftIcon ? (
           <Pressable
@@ -26,7 +36,7 @@ const CommonHead = props => {
         ) : (
           <></>
         )}
-        <Font400 style={styles.title}>{'Englivia'}</Font400>
+        <Font700 style={styles.title}>{title}</Font700>
         {rightIcon ? (
           <Pressable
             onPress={onPressRight}
@@ -41,6 +51,7 @@ const CommonHead = props => {
           <></>
         )}
       </View>
+      {children}
       <LinearGradient
         colors={['#ffffff', '#ffffff00']}
         style={[styles.circle, styles.circle2]}
@@ -57,21 +68,21 @@ export default memo(CommonHead);
 
 const styles = StyleSheet.create({
   root: {
-    height: 78,
+    minHeight: 78,
     overflow: 'hidden',
     paddingHorizontal: 20,
-    justifyContent: 'center',
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,
     backgroundColor: colors.color113251,
   },
   container: {
-    flex: 1,
+    marginTop: 21,
+    alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
   },
   button: {
+    zIndex: 1,
     width: 36,
     height: 36,
     borderRadius: 10,

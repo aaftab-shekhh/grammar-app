@@ -5,4 +5,5 @@ export const screens = {
   LearnWithImages: 'LearnWithImagesScreen',
   SelectSet: 'SelectSetScreen',
   SelectLevel: 'SelectLevelScreen',
+  LearnWithQuiz: 'LearnWithQuiz',
 };
