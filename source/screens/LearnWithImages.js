@@ -1,5 +1,5 @@
 import {useNavigation} from '@react-navigation/native';
-import React, {memo} from 'react';
+import React, {memo, useCallback, useState} from 'react';
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import {images} from '../assets';
 import Font600 from '../components/font/Font600';
@@ -12,10 +12,24 @@ import FastImage from 'react-native-fast-image';
 import {deviceWidth} from '../constants/constants';
 import Button from '../components/styles/Button';
 
+const array = Array(10).fill(0);
+
 const LearnWithImages = ({route}) => {
   const set_no = route?.params?.set_no;
 
+  const [currentIndex, setCurrentIndex] = useState(0);
+
   const {goBack} = useNavigation();
+
+  const onNextHandler = useCallback(
+    () => setCurrentIndex(prev => (prev + 1 < array.length ? prev + 1 : prev)),
+    [],
+  );
+
+  const onPrevHandler = useCallback(
+    () => setCurrentIndex(prev => (prev >= 0 ? prev - 1 : prev)),
+    [],
+  );
 
   return (
     <View style={styles.root}>
@@ -51,14 +65,22 @@ const LearnWithImages = ({route}) => {
         />
       </ScrollView>
       <View style={styles.buttonContainer}>
-        <Button iconStyle={styles.buttonIcon} icon={images.arrow_left}>
-          {'Prev'}
-        </Button>
+        {currentIndex !== 0 ? (
+          <Button
+            onPress={onPrevHandler}
+            iconStyle={styles.buttonIcon}
+            icon={images.arrow_left}>
+            {'Prev'}
+          </Button>
+        ) : (
+          <View />
+        )}
         <Button
+          onPress={onNextHandler}
           iconStyle={styles.buttonIcon}
           buttonStyle={styles.next}
           icon={images.arrow_right}>
-          {'Next'}
+          {currentIndex === 0 ? 'Start' : 'Next'}
         </Button>
       </View>
       <View
@@ -141,12 +163,12 @@ const styles = StyleSheet.create({
     width: 24,
   },
   buttonContainer: {
-    position: 'absolute',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingHorizontal: 8,
     bottom: 52,
     width: '100%',
+    position: 'absolute',
+    flexDirection: 'row',
+    paddingHorizontal: 8,
+    justifyContent: 'space-between',
   },
   next: {
     flexDirection: 'row-reverse',

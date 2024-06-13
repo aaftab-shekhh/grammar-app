@@ -10,6 +10,7 @@ import LearnWithImages from '../screens/LearnWithImages';
 import LearnWithQuiz from '../screens/LearnWithQuiz';
 import SelectLevel from '../screens/SelectLevel';
 import SelectSet from '../screens/SelectSet';
+import Setting from '../screens/Setting';
 
 const Stack = createNativeStackNavigator();
 
@@ -24,6 +25,7 @@ const Root = () => {
           contentStyle: {
             backgroundColor: colors.white,
           },
+          animation: 'slide_from_right',
         }}>
         <Stack.Screen name={screens.Home} component={Home} />
         <Stack.Screen name={screens.SelectLevel} component={SelectLevel} />
@@ -33,6 +35,11 @@ const Root = () => {
           component={LearnWithImages}
         />
         <Stack.Screen name={screens.LearnWithQuiz} component={LearnWithQuiz} />
+        <Stack.Screen
+          name={screens.Settings}
+          component={Setting}
+          options={{animation: 'slide_from_left'}}
+        />
       </Stack.Navigator>
       <View style={{height: bottom, backgroundColor: colors.black}} />
     </NavigationContainer>

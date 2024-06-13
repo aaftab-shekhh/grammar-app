@@ -35,13 +35,14 @@ export default memo(CourseListing);
 
 const styles = StyleSheet.create({
   root: {
-    elevation: 1,
+    elevation: 4,
     marginTop: 11,
     shadowRadius: 4,
     marginBottom: 67,
     shadowOpacity: 0.1,
     marginHorizontal: 8,
     shadowColor: colors.black,
+    backgroundColor: colors.white,
     shadowOffset: {height: 2, width: 0},
   },
 });

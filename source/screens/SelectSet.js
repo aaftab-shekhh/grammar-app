@@ -5,6 +5,7 @@ import {images} from '../assets';
 import {useNavigation} from '@react-navigation/native';
 import {colors} from '../constants/colors';
 import Font700 from '../components/font/Font700';
+import SelectItem from '../components/items/SelectItem';
 
 const SelectSet = ({route}) => {
   const screens_form = route?.params?.screens_form;
@@ -17,37 +18,11 @@ const SelectSet = ({route}) => {
     };
 
     return (
-      <Pressable
+      <SelectItem
         onPress={onNavigateScreen}
-        style={{
-          height: 72,
-          paddingLeft: 8,
-          borderRadius: 7,
-          shadowRadius: 1,
-          borderWidth: 0.5,
-          shadowOpacity: 0.1,
-          marginHorizontal: 8,
-          justifyContent: 'center',
-          shadowColor: colors.black,
-          backgroundColor: colors.white,
-          shadowOffset: {height: 2, width: 2},
-          borderColor: colors.transparent_black_10,
-        }}>
-        <Font700
-          style={{
-            fontSize: 16,
-            colors: colors.black,
-          }}>
-          {`Set ${index + 1}`}
-        </Font700>
-        <Font700
-          style={{
-            fontSize: 12,
-            colors: colors.black,
-          }}>
-          {'10 Questions'}
-        </Font700>
-      </Pressable>
+        title={`Set ${index + 1}`}
+        subTitle={'10 Questions'}
+      />
     );
   }, []);
 
@@ -90,5 +65,6 @@ const styles = StyleSheet.create({
   list: {
     flexGrow: 1,
     paddingVertical: 32,
+    marginHorizontal: 8,
   },
 });

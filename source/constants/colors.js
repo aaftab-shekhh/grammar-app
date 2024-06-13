@@ -1,5 +1,6 @@
 export const colors = {
   transparent_black_10: 'hsla(0, 0%, 0%, 0.1)',
+  transparent_black_40: 'hsla(0, 0%, 0%, 0.4)',
   white: 'white',
   black: 'black',
   transparent: 'transparent',
@@ -8,4 +9,8 @@ export const colors = {
   color616161: '#616161',
   colorFF0E0E: '#FF0E0E',
   color89C6F0: '#89C6F0',
+  colorC0DFF7: '#C0DFF7',
+  color228ED5: '#228ED5',
+  colorDCF9FF: '#DCF9FF',
+  color616161: '#616161',
 };

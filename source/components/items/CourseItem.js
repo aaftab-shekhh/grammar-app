@@ -37,18 +37,17 @@ const styles = StyleSheet.create({
   root: {
     borderWidth: 1,
     alignItems: 'center',
-    width: (deviceWidth - 16) / 3,
+    justifyContent: 'center',
     backgroundColor: colors.white,
+    width: (deviceWidth - 16) / 3,
     height: (deviceWidth - 16) / 3,
     borderColor: colors.transparent_black_10,
   },
   iconStyle: {
     width: 41,
     height: 41,
-    marginTop: 8,
   },
   title: {
-    flex: 1,
     fontSize: 12,
     marginTop: 11,
     textAlign: 'center',

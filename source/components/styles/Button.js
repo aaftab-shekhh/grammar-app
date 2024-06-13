@@ -5,10 +5,10 @@ import {colors} from '../../constants/colors';
 import FastImage from 'react-native-fast-image';
 
 const Button = props => {
-  const {children, buttonStyle, textStyle, iconStyle, icon} = props;
+  const {children, buttonStyle, textStyle, iconStyle, icon, onPress} = props;
 
   return (
-    <Pressable style={[styles.button, buttonStyle]}>
+    <Pressable onPress={onPress} style={[styles.button, buttonStyle]}>
       <FastImage style={iconStyle} source={icon} resizeMode="contain" />
       <Font700 style={[styles.textStyle, textStyle]}>{children}</Font700>
     </Pressable>

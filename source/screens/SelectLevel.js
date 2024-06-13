@@ -6,6 +6,8 @@ import {useNavigation} from '@react-navigation/native';
 import Font700 from '../components/font/Font700';
 import {colors} from '../constants/colors';
 import {screens} from '../constants/screens';
+import FastImage from 'react-native-fast-image';
+import SelectItem from '../components/items/SelectItem';
 
 const SelectLevel = () => {
   const {goBack} = useNavigation();
@@ -28,14 +30,16 @@ const SelectLevel = () => {
         title={'Select Level'}
       />
       <View style={styles.content}>
-        <Pressable onPress={onNavigateSetForImage} style={styles.levelItem}>
-          <Font700 style={styles.titleOfItem}>{'Learn with Images'}</Font700>
-        </Pressable>
-        <Pressable onPress={onNavigateSetForQuiz} style={styles.levelItem}>
-          <Font700 style={styles.titleOfItem}>
-            {'Quiz with Definitions'}
-          </Font700>
-        </Pressable>
+        <SelectItem
+          style={styles.item}
+          onPress={onNavigateSetForImage}
+          title={'Learn with Images'}
+        />
+        <SelectItem
+          style={styles.item}
+          onPress={onNavigateSetForQuiz}
+          title={'Quiz with Definitions'}
+        />
       </View>
     </View>
   );
@@ -51,21 +55,7 @@ const styles = StyleSheet.create({
     marginTop: 32,
     marginHorizontal: 8,
   },
-  levelItem: {
-    height: 72,
+  item: {
     marginBottom: 8,
-    borderRadius: 7,
-    shadowRadius: 1,
-    shadowOpacity: 0.1,
-    justifyContent: 'center',
-    shadowColor: colors.black,
-    backgroundColor: colors.white,
-    shadowOffset: {height: 2, width: 2},
-    borderWidth: 0.5,
-    borderColor: colors.transparent_black_10,
-  },
-  titleOfItem: {
-    fontSize: 16,
-    paddingLeft: 8,
   },
 });
