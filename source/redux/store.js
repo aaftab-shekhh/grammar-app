@@ -11,28 +11,13 @@ const authSlice = createSlice({
   name: 'auth',
   initialState: {
     user: null,
-    current_city: null,
-    is_installed: false,
-    is_unauthenticated: false,
   },
 
   reducers: {
-    login: (state, action) => {
-      state.user = action.payload;
-      state.is_unauthenticated = false;
-    },
-    logout: state => {
-      state.user = null;
-      state.is_unauthenticated = false;
-    },
-    update: (state, action) => {
-      state.user.user = {...state.user.user, ...action.payload};
-    },
-    update_is_installed: state => {
-      state.is_installed = true;
-    },
-    update_is_unauthenticated: state => {
-      state.is_unauthenticated = true;
+    update_user: (state, action) => {
+      state.user = state.user
+        ? {...state.user, ...action.payload}
+        : action.payload;
     },
   },
 });
@@ -54,11 +39,4 @@ const store = configureStore({
 export default store;
 export const persistor = persistStore(store);
 
-export const {
-  login,
-  logout,
-  update,
-  update_city,
-  update_is_installed,
-  update_is_unauthenticated,
-} = authSlice.actions;
+export const {update_user} = authSlice.actions;

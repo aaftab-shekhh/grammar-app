@@ -1,11 +1,11 @@
 import axios from 'axios';
-const baseURL = 'url';
+const baseURL = 'https://cl.englivia.com/api-v2.php';
 
 const instance = axios.create({
   baseURL: baseURL,
   headers: {
-    Accept: 'application/json',
-    'Content-Type': 'application/json',
+    Accept: '*/*',
+    'Content-Type': 'multipart/form-data; boundary=<calculated when request is sent>',
   },
 });
 

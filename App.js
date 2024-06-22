@@ -3,16 +3,23 @@ import React from 'react';
 import Root from './source/stacks/Root';
 import {colors} from './source/constants/colors';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
+import store, {persistor} from './source/redux/store';
+import {Provider} from 'react-redux';
+import {PersistGate} from 'redux-persist/lib/integration/react';
 
 const App = () => {
   return (
     <SafeAreaProvider>
-      <StatusBar
-        translucent={true}
-        barStyle={'light-content'}
-        backgroundColor={colors.transparent}
-      />
-      <Root />
+      <Provider store={store}>
+        <PersistGate persistor={persistor}>
+          <StatusBar
+            translucent={true}
+            barStyle={'light-content'}
+            backgroundColor={colors.transparent}
+          />
+          <Root />
+        </PersistGate>
+      </Provider>
     </SafeAreaProvider>
   );
 };

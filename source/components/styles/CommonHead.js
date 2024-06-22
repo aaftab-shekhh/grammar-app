@@ -19,6 +19,7 @@ const CommonHead = props => {
   } = props;
 
   const {top} = useSafeAreaInsets();
+
   return (
     <View
       style={[styles.root, {height: top + 78 + extraHeight, paddingTop: top}]}>

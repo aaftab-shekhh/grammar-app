@@ -1,30 +1,55 @@
 import {useNavigation} from '@react-navigation/native';
-import React, {memo, useCallback, useState} from 'react';
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
+import React, {memo, useCallback, useEffect, useState} from 'react';
+import {ScrollView, StyleSheet, View} from 'react-native';
+import FastImage from 'react-native-fast-image';
 import {images} from '../assets';
+import Font400 from '../components/font/Font400';
 import Font600 from '../components/font/Font600';
-import CommonHead from '../components/styles/CommonHead';
-import {colors} from '../constants/colors';
 import Font700 from '../components/font/Font700';
 import Font800 from '../components/font/Font800';
-import Font400 from '../components/font/Font400';
-import FastImage from 'react-native-fast-image';
-import {deviceWidth} from '../constants/constants';
 import Button from '../components/styles/Button';
-
-const array = Array(10).fill(0);
+import CommonHead from '../components/styles/CommonHead';
+import {colors} from '../constants/colors';
+import {deviceWidth} from '../constants/constants';
+import {get_data} from '../utils/api';
 
 const LearnWithImages = ({route}) => {
-  const set_no = route?.params?.set_no;
+  const {title, id} = route?.params?.data;
 
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const {goBack} = useNavigation();
 
-  const onNextHandler = useCallback(
-    () => setCurrentIndex(prev => (prev + 1 < array.length ? prev + 1 : prev)),
-    [],
-  );
+  const [data, setData] = useState([]);
+  const [loader, setLoader] = useState(false);
+
+  const getData = useCallback(async () => {
+    const data = {
+      access_key: 6808,
+      get_details_by_learning: 1,
+      learning_id: id,
+    };
+
+    try {
+      setLoader(true);
+      const response = await get_data(data);
+      setData(response?.data);
+    } catch (error) {
+    } finally {
+      setLoader(false);
+    }
+  }, [id]);
+
+  useEffect(() => {
+    if (id) getData();
+  }, [id]);
+
+  const onNextHandler = useCallback(() => {
+    if (currentIndex + 1 === data.length) {
+    } else {
+      setCurrentIndex(prev => (prev + 1 < data.length ? prev + 1 : prev));
+    }
+  }, [currentIndex]);
 
   const onPrevHandler = useCallback(
     () => setCurrentIndex(prev => (prev >= 0 ? prev - 1 : prev)),
@@ -38,32 +63,36 @@ const LearnWithImages = ({route}) => {
         onPressLeft={goBack}
         title={'Idioms And Phrases'}
         extraHeight={33}>
-        <Font600 style={styles.heading}>{set_no}</Font600>
+        <Font600 style={styles.heading}>{title}</Font600>
       </CommonHead>
+
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.container}>
         <View style={styles.titleContainer}>
-          <Font700 style={styles.title}>{'God’s Acre'}</Font700>
+          <Font700 style={styles.title}>{data[currentIndex]?.headline}</Font700>
         </View>
         <View style={styles.meaningContainer}>
           <Font800 style={styles.meaningTitle}>{'Meaning : '}</Font800>
           <Font400 style={styles.meaningContent}>
-            {'Cemetery, Adjacent to the Church'}
+            {data[currentIndex]?.headline_meaning}
           </Font400>
         </View>
         <View style={styles.meaningContainer}>
           <Font800 style={styles.meaningTitle}>{'Sentence : '}</Font800>
           <Font400 style={styles.meaningContent}>
-            {'An area adjacent to a cemetery is called god’s acre'}
+            {data[currentIndex]?.detail}
           </Font400>
         </View>
         <FastImage
-          source={images.imageQuestion}
+          source={{
+            uri: `https://cl.englivia.com/images/category/${data[currentIndex]?.image}`,
+          }}
           resizeMode={'cover'}
           style={styles.image}
         />
       </ScrollView>
+
       <View style={styles.buttonContainer}>
         {currentIndex !== 0 ? (
           <Button
@@ -75,13 +104,15 @@ const LearnWithImages = ({route}) => {
         ) : (
           <View />
         )}
-        <Button
-          onPress={onNextHandler}
-          iconStyle={styles.buttonIcon}
-          buttonStyle={styles.next}
-          icon={images.arrow_right}>
-          {currentIndex === 0 ? 'Start' : 'Next'}
-        </Button>
+        {currentIndex + 1 === data.length ? null : (
+          <Button
+            onPress={onNextHandler}
+            iconStyle={styles.buttonIcon}
+            buttonStyle={styles.next}
+            icon={images.arrow_right}>
+            {currentIndex === 0 ? 'Start' : 'Next'}
+          </Button>
+        )}
       </View>
       <View
         style={{
@@ -165,6 +196,7 @@ const styles = StyleSheet.create({
   buttonContainer: {
     bottom: 52,
     width: '100%',
+    marginBottom: 1,
     position: 'absolute',
     flexDirection: 'row',
     paddingHorizontal: 8,

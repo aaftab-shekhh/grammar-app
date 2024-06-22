@@ -1,26 +1,33 @@
-import React, {memo, useCallback} from 'react';
-import {Pressable, StyleSheet, View} from 'react-native';
-import {images} from '../assets';
-import CommonHead from '../components/styles/CommonHead';
 import {useNavigation} from '@react-navigation/native';
-import Font700 from '../components/font/Font700';
-import {colors} from '../constants/colors';
-import {screens} from '../constants/screens';
-import FastImage from 'react-native-fast-image';
+import React, {memo, useCallback} from 'react';
+import {StyleSheet, View} from 'react-native';
+import {images} from '../assets';
 import SelectItem from '../components/items/SelectItem';
+import CommonHead from '../components/styles/CommonHead';
+import {screens} from '../constants/screens';
 
-const SelectLevel = () => {
+const SelectLevel = ({route}) => {
   const {goBack} = useNavigation();
+
+  const {language_id, category_id} = route?.params;
 
   const {navigate} = useNavigation();
 
   const onNavigateSetForImage = useCallback(() => {
-    navigate(screens.SelectSet, {screens_form: screens.LearnWithImages});
-  }, []);
+    navigate(screens.SelectSet, {
+      screens_form: screens.LearnWithImages,
+      language_id: language_id,
+      category: 1,
+    });
+  }, [language_id, category_id]);
 
   const onNavigateSetForQuiz = useCallback(() => {
-    navigate(screens.SelectSet, {screens_form: screens.LearnWithQuiz});
-  }, []);
+    navigate(screens.SelectSet, {
+      screens_form: screens.LearnWithQuiz,
+      language_id: language_id,
+      category: 2,
+    });
+  }, [language_id, category_id]);
 
   return (
     <View style={styles.root}>

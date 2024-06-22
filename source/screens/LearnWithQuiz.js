@@ -1,31 +1,64 @@
-import {Pressable, ScrollView, StyleSheet, Text, View} from 'react-native';
-import React, {memo, useCallback, useEffect, useState} from 'react';
-import CommonHead from '../components/styles/CommonHead';
-import {images} from '../assets';
 import {useNavigation} from '@react-navigation/native';
+import React, {memo, useCallback, useEffect, useRef, useState} from 'react';
+import {Pressable, ScrollView, StyleSheet, View} from 'react-native';
+import {images} from '../assets';
 import Font600 from '../components/font/Font600';
-import Button from '../components/styles/Button';
-import {colors} from '../constants/colors';
 import Font700 from '../components/font/Font700';
+import QuestionSubmitModel from '../components/model/QuestionSubmitModel';
+import Button from '../components/styles/Button';
+import CommonHead from '../components/styles/CommonHead';
 import ProgressBar from '../components/styles/ProgressBar';
-
-const array = Array(6).fill(0);
+import {colors} from '../constants/colors';
+import {get_data} from '../utils/api';
 
 const LearnWithQuiz = ({route}) => {
-  const set_no = route?.params?.set_no;
+  const {title, id} = route?.params?.data;
 
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [progress, setProgress] = useState(0);
+  console.log('id', id);
+
+  const questionModel = useRef();
 
   const {goBack} = useNavigation();
 
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [progress, setProgress] = useState(0);
+  const [data, setData] = useState([]);
+  const [loader, setLoader] = useState(false);
+
+  const getData = useCallback(async () => {
+    const data = {
+      access_key: 6808,
+      get_questions_by_learning: 1,
+      learning_id: id,
+    };
+
+    try {
+      setLoader(true);
+      const response = await get_data(data);
+      setData(response?.data);
+    } catch (error) {
+      console.log('error', error);
+    } finally {
+      setLoader(false);
+    }
+  }, [id]);
+
   useEffect(() => {
-    const progressPercentage = ((currentIndex + 1) / array.length) * 100;
+    if (id) getData();
+  }, [id]);
+
+  useEffect(() => {
+    if (!data || data?.length === 0) return;
+    const progressPercentage = ((currentIndex + 1) / data?.length) * 100;
     setProgress(progressPercentage);
-  }, [currentIndex]);
+  }, [currentIndex, data]);
+
+  useEffect(() => {
+    if (data?.length - 1 === currentIndex) questionModel?.current?.open();
+  }, [currentIndex, data]);
 
   const onNextHandler = useCallback(
-    () => setCurrentIndex(prev => (prev + 1 < array.length ? prev + 1 : prev)),
+    () => setCurrentIndex(prev => (prev + 1 < data.length ? prev + 1 : prev)),
     [],
   );
 
@@ -36,12 +69,13 @@ const LearnWithQuiz = ({route}) => {
 
   return (
     <View style={styles.root}>
+      <QuestionSubmitModel ref={questionModel} />
       <CommonHead
         leftIcon={images.arrow_left}
         onPressLeft={goBack}
         title={'Idioms And Phrases'}
         extraHeight={33}>
-        <Font600 style={styles.heading}>{set_no}</Font600>
+        <Font600 style={styles.heading}>{title}</Font600>
       </CommonHead>
       <ScrollView
         showsVerticalScrollIndicator={false}
@@ -52,7 +86,7 @@ const LearnWithQuiz = ({route}) => {
             progress={progress}
             barColor={colors.color228ED5}
             backgroundColor={colors.colorC0DFF7}
-            totalQuestion={array.length}
+            totalQuestion={data.length}
             completedQuestion={currentIndex}
           />
         </View>
@@ -60,24 +94,30 @@ const LearnWithQuiz = ({route}) => {
           <Font600 style={styles.questionTitle}>{'All Thumbs'}</Font600>
         </View>
         <View style={styles.answerContainer}>
-          {Array(4)
-            .fill(0)
-            .map((_, index) => {
-              return (
-                <Pressable style={styles.answer} key={index?.toString()}>
-                  <Font600 style={styles.answerText}>
-                    {index === 0
-                      ? 'A.  '
-                      : index === 1
-                      ? 'B.  '
-                      : index === 2
-                      ? 'C.  '
-                      : 'D.  '}
-                  </Font600>
-                  <Font600 style={styles.answerText}>{'All Thumbs'}</Font600>
-                </Pressable>
-              );
-            })}
+          <Pressable style={styles.answer}>
+            <Font600 style={styles.answerText}></Font600>
+            <Font600 style={styles.answerText}>
+              {data[currentIndex]?.optiona}
+            </Font600>
+          </Pressable>
+          <Pressable style={styles.answer}>
+            <Font600 style={styles.answerText}></Font600>
+            <Font600 style={styles.answerText}>
+              {data[currentIndex]?.optionb}
+            </Font600>
+          </Pressable>
+          <Pressable style={styles.answer}>
+            <Font600 style={styles.answerText}></Font600>
+            <Font600 style={styles.answerText}>
+              {data[currentIndex]?.optionc}
+            </Font600>
+          </Pressable>
+          <Pressable style={styles.answer}>
+            <Font600 style={styles.answerText}></Font600>
+            <Font600 style={styles.answerText}>
+              {data[currentIndex]?.optiond}
+            </Font600>
+          </Pressable>
         </View>
       </ScrollView>
       <View style={styles.buttonContainer}>
@@ -91,7 +131,9 @@ const LearnWithQuiz = ({route}) => {
         ) : (
           <View />
         )}
-        {array?.length !== currentIndex + 1 ? (
+        {data?.length !== currentIndex + 1 ? <View /> : null}
+
+        {data?.length !== currentIndex + 1 ? (
           <Button
             onPress={onNextHandler}
             iconStyle={styles.buttonIcon}
@@ -100,7 +142,12 @@ const LearnWithQuiz = ({route}) => {
             {'Next'}
           </Button>
         ) : (
-          <View />
+          <Button
+            onPress={onNextHandler}
+            buttonStyle={{flex: 1, marginHorizontal: 8, marginBottom: 20}}
+            icon={images.arrow_right}>
+            {'Submit Test'}
+          </Button>
         )}
       </View>
       <View

@@ -1,31 +1,30 @@
-import {Pressable, StyleSheet, Text, View} from 'react-native';
-import React, {memo, useCallback} from 'react';
-import {deviceWidth} from '../../constants/constants';
-import {colors} from '../../constants/colors';
-import Font700 from '../font/Font700';
-import FastImage from 'react-native-fast-image';
-import {images} from '../../assets';
 import {useNavigation} from '@react-navigation/native';
+import React, {memo, useCallback} from 'react';
+import {Pressable, StyleSheet} from 'react-native';
+import FastImage from 'react-native-fast-image';
+import {colors} from '../../constants/colors';
+import {deviceWidth} from '../../constants/constants';
 import {screens} from '../../constants/screens';
+import Font700 from '../font/Font700';
 
 const CourseItem = ({data}) => {
-  const {title} = data;
+  const {category_name, image, language_id, id} = data;
 
   const {navigate} = useNavigation();
 
   const onNavigateSelect = useCallback(() => {
-    navigate(screens.SelectLevel);
-  }, [navigate]);
+    navigate(screens.SelectLevel, {language_id: language_id, category_id: id});
+  }, [navigate, language_id, id]);
 
   return (
     <Pressable onPress={onNavigateSelect} style={styles.root}>
       <FastImage
         style={styles.iconStyle}
-        source={images.course_blue_icon}
+        source={{uri: image}}
         resizeMode="contain"
       />
       <Font700 numberOfLines={3} style={styles.title}>
-        {title}
+        {category_name}
       </Font700>
     </Pressable>
   );

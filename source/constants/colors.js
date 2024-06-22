@@ -1,5 +1,6 @@
 export const colors = {
   transparent_black_10: 'hsla(0, 0%, 0%, 0.1)',
+  transparent_black_20: 'hsla(0, 0%, 0%, 0.2)',
   transparent_black_40: 'hsla(0, 0%, 0%, 0.4)',
   white: 'white',
   black: 'black',
