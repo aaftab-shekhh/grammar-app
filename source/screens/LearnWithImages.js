@@ -12,11 +12,15 @@ import CommonHead from '../components/styles/CommonHead';
 import {colors} from '../constants/colors';
 import {deviceWidth} from '../constants/constants';
 import {get_data} from '../utils/api';
+import {useSelector} from 'react-redux';
 
 const LearnWithImages = ({route}) => {
-  const {title, id} = route?.params?.data;
+  const route_data = route?.params;
+  const {title, category_name, id} = route_data?.data;
 
   const [currentIndex, setCurrentIndex] = useState(0);
+
+  const user = useSelector(state => state?.auth);
 
   const {goBack} = useNavigation();
 
@@ -38,7 +42,7 @@ const LearnWithImages = ({route}) => {
     } finally {
       setLoader(false);
     }
-  }, [id]);
+  }, [id, user]);
 
   useEffect(() => {
     if (id) getData();
@@ -49,7 +53,7 @@ const LearnWithImages = ({route}) => {
     } else {
       setCurrentIndex(prev => (prev + 1 < data.length ? prev + 1 : prev));
     }
-  }, [currentIndex]);
+  }, [currentIndex, data]);
 
   const onPrevHandler = useCallback(
     () => setCurrentIndex(prev => (prev >= 0 ? prev - 1 : prev)),
@@ -61,7 +65,7 @@ const LearnWithImages = ({route}) => {
       <CommonHead
         leftIcon={images.arrow_left}
         onPressLeft={goBack}
-        title={'Idioms And Phrases'}
+        title={category_name}
         extraHeight={33}>
         <Font600 style={styles.heading}>{title}</Font600>
       </CommonHead>
@@ -88,7 +92,7 @@ const LearnWithImages = ({route}) => {
           source={{
             uri: `https://cl.englivia.com/images/category/${data[currentIndex]?.image}`,
           }}
-          resizeMode={'cover'}
+          resizeMode={'contain'}
           style={styles.image}
         />
       </ScrollView>
@@ -110,7 +114,7 @@ const LearnWithImages = ({route}) => {
             iconStyle={styles.buttonIcon}
             buttonStyle={styles.next}
             icon={images.arrow_right}>
-            {currentIndex === 0 ? 'Start' : 'Next'}
+            {'Next'}
           </Button>
         )}
       </View>
@@ -183,7 +187,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   image: {
-    height: 188,
+    height: 390,
     marginTop: 32,
     borderRadius: 16,
     alignSelf: 'center',

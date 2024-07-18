@@ -5,7 +5,7 @@ import {images} from '../../assets';
 import {colors} from '../../constants/colors';
 import Font700 from '../font/Font700';
 
-const SelectItem = ({onPress, title, subTitle, style}) => {
+const SelectItem = ({onPress, title, subTitle, style, data}) => {
   return (
     <Pressable onPress={onPress} style={[styles.root, style]}>
       <FastImage
@@ -19,6 +19,9 @@ const SelectItem = ({onPress, title, subTitle, style}) => {
         />
       </FastImage>
       {title ? <Font700 style={styles.title}>{title}</Font700> : null}
+      {data?.subcategory_name ? (
+        <Font700 style={styles.title}>{data?.subcategory_name}</Font700>
+      ) : null}
       {subTitle ? <Font700 style={styles.subTitle}>{subTitle}</Font700> : null}
     </Pressable>
   );

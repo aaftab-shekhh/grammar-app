@@ -34,9 +34,10 @@ const ProgressBar = ({
           {width: widthInterpolation, backgroundColor: barColor},
         ]}
       />
-      <Font600 style={styles.title}>{`Question ${totalQuestion} of ${
-        completedQuestion + 1
-      }`}</Font600>
+      <Font600
+        style={
+          styles.title
+        }>{`Question ${totalQuestion} of ${completedQuestion}`}</Font600>
     </View>
   );
 };

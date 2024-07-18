@@ -9,25 +9,23 @@ import {screens} from '../constants/screens';
 const SelectLevel = ({route}) => {
   const {goBack} = useNavigation();
 
-  const {language_id, category_id} = route?.params;
+  const route_data = route?.params;
 
   const {navigate} = useNavigation();
 
   const onNavigateSetForImage = useCallback(() => {
     navigate(screens.SelectSet, {
+      ...route_data,
       screens_form: screens.LearnWithImages,
-      language_id: language_id,
-      category: 1,
     });
-  }, [language_id, category_id]);
+  }, [route_data]);
 
   const onNavigateSetForQuiz = useCallback(() => {
     navigate(screens.SelectSet, {
+      ...route_data,
       screens_form: screens.LearnWithQuiz,
-      language_id: language_id,
-      category: 2,
     });
-  }, [language_id, category_id]);
+  }, [route_data]);
 
   return (
     <View style={styles.root}>

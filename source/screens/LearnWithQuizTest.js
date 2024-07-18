@@ -14,8 +14,8 @@ import ProgressBar from '../components/styles/ProgressBar';
 import {colors} from '../constants/colors';
 import {get_data} from '../utils/api';
 
-const LearnWithQuiz = ({route}) => {
-  const {title, id, category_name, type} = route?.params?.data;
+const LearnWithQuizTest = ({route}) => {
+  const {title, id, category_name} = route?.params?.data;
 
   const {goBack} = useNavigation();
 
@@ -54,19 +54,11 @@ const LearnWithQuiz = ({route}) => {
   }, [rightAnswerCount, wrongAnswerCount, skipAnswerCount, data]);
 
   const getData = useCallback(async () => {
-    let data = {
+    const data = {
       access_key: 6808,
       get_questions_by_learning: 1,
       learning_id: id,
     };
-
-    if (type === '1') {
-      data = {
-        access_key: 6808,
-        get_questions_by_subcategory: 1,
-        subcategory: id,
-      };
-    }
 
     try {
       setLoader(true);
@@ -100,7 +92,7 @@ const LearnWithQuiz = ({route}) => {
     } finally {
       setLoader(false);
     }
-  }, [id, type]);
+  }, [id]);
 
   useEffect(() => {
     if (id) getData();
@@ -160,12 +152,12 @@ const LearnWithQuiz = ({route}) => {
         right={rightAnswerCount}
         wrong={wrongAnswerCount}
         total={data?.length}
-        title={'Result : ' + category_name}
+        title={'Result : ' + mainTitle}
       />
       <CommonHead
         leftIcon={images.arrow_left}
         onPressLeft={goBack}
-        title={category_name}
+        title={mainTitle}
         extraHeight={33}>
         <Font600 style={styles.heading}>{title}</Font600>
       </CommonHead>
@@ -274,7 +266,7 @@ const LearnWithQuiz = ({route}) => {
   );
 };
 
-export default memo(LearnWithQuiz);
+export default memo(LearnWithQuizTest);
 
 const styles = StyleSheet.create({
   root: {

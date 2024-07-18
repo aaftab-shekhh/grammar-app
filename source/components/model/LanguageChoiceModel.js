@@ -16,7 +16,7 @@ import {
   View,
 } from 'react-native';
 import {colors} from '../../constants/colors';
-import {get_data} from '../../utils/api';
+import {get_data, get_token} from '../../utils/api';
 import Font400 from '../font/Font400';
 import Font700 from '../font/Font700';
 import {useDispatch, useSelector} from 'react-redux';
@@ -36,7 +36,10 @@ const LanguageChoiceModel = forwardRef((_, ref) => {
 
   const dispatch = useDispatch();
 
-  const close = useCallback(() => setVisible(false), []);
+  const close = useCallback(() => {
+    if (!user?.user?.language) return;
+    setVisible(false);
+  }, [user?.user?.language]);
 
   useFocusEffect(
     useCallback(() => {
@@ -76,12 +79,30 @@ const LanguageChoiceModel = forwardRef((_, ref) => {
       const response = await get_data(data);
       setData(response?.data);
     } catch (error) {
+      console.log('error', error);
     } finally {
       setLoader(false);
     }
-  }, [user]);
+  }, [user?.user?.access_token]);
+
+  const getToken = useCallback(async () => {
+    if (user?.user?.access_token && user?.user?.access_token?.length !== 0)
+      return;
+
+    try {
+      setLoader(true);
+      const response = await get_token();
+      dispatch(update_user({access_token: response}));
+      getData();
+    } catch (e) {
+      error(e);
+    } finally {
+      setLoader(false);
+    }
+  }, [user?.user?.access_token]);
 
   useEffect(() => {
+    getToken();
     getData();
   }, []);
 
@@ -103,7 +124,7 @@ const LanguageChoiceModel = forwardRef((_, ref) => {
               {'Select Your Mode Of Study'}
             </Font700>
           </View>
-          {loader ? (
+          {loader || data?.length === 0 ? (
             <View style={styles.loaderContainer}>
               <ActivityIndicator size={'large'} color={colors.color113251} />
             </View>
@@ -113,7 +134,10 @@ const LanguageChoiceModel = forwardRef((_, ref) => {
                 return (
                   <Pressable
                     key={index?.toString()}
-                    onPress={onSelectHandler?.bind(null, ele)}
+                    onPress={() => {
+                      onSelectHandler(ele);
+                      close();
+                    }}
                     style={styles.languageChoice}>
                     <Font400 style={styles.text}>{ele?.language}</Font400>
                     <View style={styles.radioButton}>

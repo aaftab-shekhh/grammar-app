@@ -10,8 +10,9 @@ import {BackHandler, Modal, Pressable, StyleSheet, View} from 'react-native';
 import {colors} from '../../constants/colors';
 import Font600 from '../font/Font600';
 import Button from '../styles/Button';
+import Font400 from '../font/Font400';
 
-const TostModel = forwardRef((_, ref) => {
+const TostModel = forwardRef(({title, message, onPress, rightButton}, ref) => {
   const [visible, setVisible] = useState(false);
 
   const close = useCallback(() => setVisible(false), []);
@@ -53,10 +54,8 @@ const TostModel = forwardRef((_, ref) => {
       animationType="fade">
       <Pressable onPress={close} style={styles.model}>
         <Pressable onPress={() => {}} style={styles.container}>
-          <Font600 style={styles.title}>
-            {'Are you sure you want to Submit?'}
-          </Font600>
-          <View style={styles.detail}></View>
+          <Font600 style={styles.title}>{title}</Font600>
+          <Font400 style={styles.message}>{message}</Font400>
           <View style={styles.buttonContainer}>
             <Button
               onPress={close}
@@ -64,8 +63,8 @@ const TostModel = forwardRef((_, ref) => {
               textStyle={styles.cancelButtonText}>
               {'Cancel'}
             </Button>
-            <Button onPress={close} buttonStyle={styles.button}>
-              {'Submit'}
+            <Button onPress={onPress} buttonStyle={styles.button}>
+              {rightButton ? rightButton : 'Okay'}
             </Button>
           </View>
         </Pressable>
@@ -92,10 +91,11 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 20,
-    textAlign: 'center',
   },
-  detail: {
-    paddingVertical: 24,
+  message: {
+    paddingVertical: 10,
+    color: colors.color113251,
+    fontSize: 12,
   },
   buttonContainer: {
     flexDirection: 'row',

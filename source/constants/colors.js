@@ -14,4 +14,11 @@ export const colors = {
   color228ED5: '#228ED5',
   colorDCF9FF: '#DCF9FF',
   color616161: '#616161',
+  color4ABBD2: '#4ABBD2',
+  colorsDBFAFE: '#DBFAFE',
+  colorF90000: '#F90000',
+  colorFEDFDC: '#FEDFDC',
+  color2F7C01: '#2F7C01',
+  colorF90000: '#F90000',
+  color616161: '#616161',
 };

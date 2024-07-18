@@ -10,11 +10,15 @@ import {update_user} from '../redux/store';
 import Home from '../screens/Home';
 import LearnWithImages from '../screens/LearnWithImages';
 import LearnWithQuiz from '../screens/LearnWithQuiz';
+import NewsPaper from '../screens/NewsPaper';
 import SelectLevel from '../screens/SelectLevel';
 import SelectSet from '../screens/SelectSet';
 import Setting from '../screens/Setting';
 import {error} from '../tost/error';
 import {get_token} from '../utils/api';
+import AboutUs from '../screens/AboutUs';
+import PrivacyPolicy from '../screens/PrivacyPolicy';
+import TermsConditions from '../screens/TermsConditions';
 
 const Stack = createNativeStackNavigator();
 
@@ -30,10 +34,8 @@ const Root = () => {
     try {
       setLoader(true);
       const response = await get_token();
-      console.log('response', response);
       dispatch(update_user({access_token: response}));
     } catch (e) {
-      console.log('e', e);
       error(e);
     } finally {
       setLoader(false);
@@ -43,8 +45,6 @@ const Root = () => {
   useEffect(() => {
     getToken();
   }, []);
-
-  console.log('loader', loader);
 
   return (
     <NavigationContainer>
@@ -64,6 +64,13 @@ const Root = () => {
           component={LearnWithImages}
         />
         <Stack.Screen name={screens.LearnWithQuiz} component={LearnWithQuiz} />
+        <Stack.Screen name={screens.AboutUs} component={AboutUs} />
+        <Stack.Screen name={screens.PrivacyPolicy} component={PrivacyPolicy} />
+        <Stack.Screen
+          name={screens.TermsConditions}
+          component={TermsConditions}
+        />
+        <Stack.Screen name={screens.NewsPaper} component={NewsPaper} />
         <Stack.Screen
           name={screens.Settings}
           component={Setting}

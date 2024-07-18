@@ -6,21 +6,36 @@ import {colors} from '../../constants/colors';
 import {deviceWidth} from '../../constants/constants';
 import {screens} from '../../constants/screens';
 import Font700 from '../font/Font700';
+import {images} from '../../assets';
 
 const CourseItem = ({data}) => {
-  const {category_name, image, language_id, id} = data;
+  const {category_name, type} = data;
 
   const {navigate} = useNavigation();
 
   const onNavigateSelect = useCallback(() => {
-    navigate(screens.SelectLevel, {language_id: language_id, category_id: id});
-  }, [navigate, language_id, id]);
+    if (type === '2') {
+      navigate(screens.SelectLevel, {
+        ...data,
+      });
+    } else if (type === '1') {
+      navigate(screens.SelectSet, {
+        ...data,
+        screens_form: screens.LearnWithQuiz,
+      });
+    } else {
+      navigate(screens.SelectSet, {
+        ...data,
+        type: '3',
+      });
+    }
+  }, [data]);
 
   return (
     <Pressable onPress={onNavigateSelect} style={styles.root}>
       <FastImage
         style={styles.iconStyle}
-        source={{uri: image}}
+        source={images.course_blue_icon}
         resizeMode="contain"
       />
       <Font700 numberOfLines={3} style={styles.title}>
@@ -34,6 +49,7 @@ export default memo(CourseItem);
 
 const styles = StyleSheet.create({
   root: {
+    flex: 1,
     borderWidth: 1,
     alignItems: 'center',
     justifyContent: 'center',

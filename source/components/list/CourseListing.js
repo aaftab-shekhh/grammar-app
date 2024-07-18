@@ -5,38 +5,34 @@ import {colors} from '../../constants/colors';
 import {get_data} from '../../utils/api';
 import CourseItem from '../items/CourseItem';
 
-const array = [
-  {title: 'Idioms & phrases'},
-  {title: 'Idioms & phrases'},
-  {title: 'Idioms & phrases'},
-  {title: 'Idioms & phrases'},
-  {title: 'Idioms & phrases'},
-  {title: 'Idioms & phrases'},
-  {title: 'Idioms & phrases'},
-  {title: 'Idioms & phrases'},
-  {title: 'Idioms & phrases'},
-  {title: 'Idioms & phrases'},
-  {title: 'Idioms & phrases'},
-  {title: 'Idioms & phrases'},
-];
-
 const CourseListing = () => {
-  const [data, setData] = useState([]);
+  const [list, setList] = useState([]);
   const [loader, setLoader] = useState(false);
 
   const user = useSelector(state => state?.auth);
 
   const getData = useCallback(async () => {
     const data = {
+      type: 2,
       access_key: 6808,
       get_categories_by_language: 1,
-      language_id: Number(user?.user?.language),
+      language_id: user?.user?.language,
+    };
+    const data_2 = {
+      access_key: 6808,
+      get_categories_by_language: 1,
+      language_id: user?.user?.language,
     };
 
     try {
       setLoader(true);
       const response = await get_data(data);
-      setData(response?.data);
+      const response_2 = await get_data(data_2);
+      setList([
+        ...response?.data,
+        ...response_2?.data?.reverse(),
+        {category_name: 'Newspaper Words', type: 3},
+      ]);
     } catch (error) {
     } finally {
       setLoader(false);
@@ -49,7 +45,7 @@ const CourseListing = () => {
 
   return (
     <FlatList
-      data={data}
+      data={list}
       numColumns={3}
       scrollEnabled={false}
       contentContainerStyle={styles.root}

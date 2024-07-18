@@ -20,7 +20,7 @@ import FastImage from 'react-native-fast-image';
 import {images} from '../../assets';
 import Button from '../styles/Button';
 
-const QuestionSubmitModel = forwardRef((_, ref) => {
+const QuestionSubmitModel = forwardRef(({attempt, total, onSubmit}, ref) => {
   const [visible, setVisible] = useState(false);
 
   const close = useCallback(() => setVisible(false), []);
@@ -73,7 +73,7 @@ const QuestionSubmitModel = forwardRef((_, ref) => {
                 resizeMode="contain"
               />
               <Font600 style={styles.detailText}>{'Attempted'}</Font600>
-              <Font600 style={styles.detailTextNumber}>{'9'}</Font600>
+              <Font600 style={styles.detailTextNumber}>{attempt}</Font600>
             </View>
             <View style={styles.detailItem}>
               <FastImage
@@ -82,7 +82,9 @@ const QuestionSubmitModel = forwardRef((_, ref) => {
                 resizeMode="contain"
               />
               <Font600 style={styles.detailText}>{'Unattempted'}</Font600>
-              <Font600 style={styles.detailTextNumber}>{'1'}</Font600>
+              <Font600 style={styles.detailTextNumber}>
+                {total - attempt}
+              </Font600>
             </View>
           </View>
           <View style={styles.buttonContainer}>
@@ -92,7 +94,7 @@ const QuestionSubmitModel = forwardRef((_, ref) => {
               textStyle={styles.cancelButtonText}>
               {'Cancel'}
             </Button>
-            <Button onPress={close} buttonStyle={styles.button}>
+            <Button onPress={onSubmit} buttonStyle={styles.button}>
               {'Submit'}
             </Button>
           </View>
