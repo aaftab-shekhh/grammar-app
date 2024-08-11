@@ -19,6 +19,8 @@ export const colors = {
   colorF90000: '#F90000',
   colorFEDFDC: '#FEDFDC',
   color2F7C01: '#2F7C01',
+  color24a726: '#24a726',
   colorF90000: '#F90000',
   color616161: '#616161',
+  color4682B4: '#4682B4',
 };

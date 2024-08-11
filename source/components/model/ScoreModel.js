@@ -1,4 +1,4 @@
-import {useFocusEffect, useNavigation} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import React, {
   forwardRef,
   memo,
@@ -7,10 +7,10 @@ import React, {
   useImperativeHandle,
   useState,
 } from 'react';
-import {BackHandler, Modal, Pressable, StyleSheet, View} from 'react-native';
+import {Modal, Pressable, StyleSheet, View} from 'react-native';
 import {colors} from '../../constants/colors';
-import Font600 from '../font/Font600';
 import Font400 from '../font/Font400';
+import Font600 from '../font/Font600';
 
 const ScoreModel = forwardRef(({title, right, wrong, total}, ref) => {
   const [visible, setVisible] = useState(false);
@@ -29,24 +29,6 @@ const ScoreModel = forwardRef(({title, right, wrong, total}, ref) => {
     goBack();
     setVisible(false);
   }, []);
-
-  useFocusEffect(
-    useCallback(() => {
-      const onBackPress = () => {
-        if (visible) {
-          setVisible(false);
-          close();
-          setVisible(false);
-          return true;
-        } else {
-          return true;
-        }
-      };
-      BackHandler.addEventListener('hardwareBackPress', onBackPress);
-      return () =>
-        BackHandler.removeEventListener('hardwareBackPress', onBackPress);
-    }, [visible]),
-  );
 
   useImperativeHandle(
     ref,

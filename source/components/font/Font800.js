@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {memo} from 'react';
 import {StyleSheet, Text} from 'react-native';
 import {colors} from '../../constants/colors';
 
@@ -10,11 +10,11 @@ const Font800 = ({children, style, numberOfLines}) => {
   );
 };
 
-export default Font800;
+export default memo(Font800);
 
 const styles = StyleSheet.create({
   font: {
-    fontWeight: 800,
+    fontFamily: 'NunitoSans_10pt-ExtraBold',
     fontSize: 16,
     color: colors.black,
     includeFontPadding: false,

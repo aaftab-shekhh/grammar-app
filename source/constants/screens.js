@@ -10,4 +10,8 @@ export const screens = {
   AboutUs: 'AboutUsScreen',
   PrivacyPolicy: 'PrivacyPolicyScreen',
   TermsConditions: 'TermsConditionsScreen',
+  Instruction: 'InstructionScreen',
+  SelectMock: 'SelectMockScreen',
+  MockTest: 'MockTestScreen',
+  CurrentAffairs: 'CurrentAffairsScreen',
 };

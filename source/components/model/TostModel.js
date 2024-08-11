@@ -1,4 +1,3 @@
-import {useFocusEffect} from '@react-navigation/native';
 import React, {
   forwardRef,
   memo,
@@ -6,34 +5,16 @@ import React, {
   useImperativeHandle,
   useState,
 } from 'react';
-import {BackHandler, Modal, Pressable, StyleSheet, View} from 'react-native';
+import {Modal, Pressable, StyleSheet, View} from 'react-native';
 import {colors} from '../../constants/colors';
+import Font400 from '../font/Font400';
 import Font600 from '../font/Font600';
 import Button from '../styles/Button';
-import Font400 from '../font/Font400';
 
 const TostModel = forwardRef(({title, message, onPress, rightButton}, ref) => {
   const [visible, setVisible] = useState(false);
 
   const close = useCallback(() => setVisible(false), []);
-
-  useFocusEffect(
-    useCallback(() => {
-      const onBackPress = () => {
-        if (visible) {
-          setVisible(false);
-          close();
-          setVisible(false);
-          return true;
-        } else {
-          return true;
-        }
-      };
-      BackHandler.addEventListener('hardwareBackPress', onBackPress);
-      return () =>
-        BackHandler.removeEventListener('hardwareBackPress', onBackPress);
-    }, [visible]),
-  );
 
   useImperativeHandle(
     ref,

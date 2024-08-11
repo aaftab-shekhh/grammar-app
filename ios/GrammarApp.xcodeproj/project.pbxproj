@@ -8,13 +8,21 @@
 
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* GrammarAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* GrammarAppTests.m */; };
+		0A6491B8057D4D4E86D37BAE /* NunitoSans_10pt-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D379D7E5E23C43649B7BB56B /* NunitoSans_10pt-ExtraBold.ttf */; };
 		0C80B921A6F3F58F76C31292 /* libPods-GrammarApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DCACB8F33CDC322A6C60F78 /* libPods-GrammarApp.a */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		25CBBB32255B45BD8D3BA1DC /* NunitoSans_10pt-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5A56D4E0F95D4174AA0A7B87 /* NunitoSans_10pt-Black.ttf */; };
+		30B2D9713684405CAD8B4E40 /* NunitoSans_10pt-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A73FF213598F43B3B8244AE0 /* NunitoSans_10pt-SemiBold.ttf */; };
+		39B6EBE4C1F842F3B59072A1 /* NunitoSans_10pt-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F8393FCA4B9943C28459DE46 /* NunitoSans_10pt-Light.ttf */; };
 		57BC28B48A19F519D1B0D901 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 57B240FD693D14CD099A5F41 /* PrivacyInfo.xcprivacy */; };
+		6857F02499B8422F90175287 /* NunitoSans_10pt-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 35AB7B3131A34A93B3834565 /* NunitoSans_10pt-ExtraLight.ttf */; };
 		7699B88040F8A987B510C191 /* libPods-GrammarApp-GrammarAppTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-GrammarApp-GrammarAppTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		938D4D597BE24E9EBF7E3D59 /* NunitoSans_10pt-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7937FBA1965B45B9BB250EB1 /* NunitoSans_10pt-Medium.ttf */; };
+		960C6A21C3E54DC2977C2EFF /* NunitoSans_10pt-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A2027707F673415F88AD8E39 /* NunitoSans_10pt-Bold.ttf */; };
+		D4BEE1E12F444DC3B0DBEC74 /* NunitoSans_10pt-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6D411F09C9394A21887D25D9 /* NunitoSans_10pt-Regular.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -39,14 +47,22 @@
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = GrammarApp/main.m; sourceTree = "<group>"; };
 		13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = PrivacyInfo.xcprivacy; path = GrammarApp/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		19F6CBCC0A4E27FBF8BF4A61 /* libPods-GrammarApp-GrammarAppTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-GrammarApp-GrammarAppTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		35AB7B3131A34A93B3834565 /* NunitoSans_10pt-ExtraLight.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "NunitoSans_10pt-ExtraLight.ttf"; path = "../source/assets/fonts/NunitoSans_10pt-ExtraLight.ttf"; sourceTree = "<group>"; };
 		3B4392A12AC88292D35C810B /* Pods-GrammarApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GrammarApp.debug.xcconfig"; path = "Target Support Files/Pods-GrammarApp/Pods-GrammarApp.debug.xcconfig"; sourceTree = "<group>"; };
 		5709B34CF0A7D63546082F79 /* Pods-GrammarApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GrammarApp.release.xcconfig"; path = "Target Support Files/Pods-GrammarApp/Pods-GrammarApp.release.xcconfig"; sourceTree = "<group>"; };
 		57B240FD693D14CD099A5F41 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = GrammarApp/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		5A56D4E0F95D4174AA0A7B87 /* NunitoSans_10pt-Black.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "NunitoSans_10pt-Black.ttf"; path = "../source/assets/fonts/NunitoSans_10pt-Black.ttf"; sourceTree = "<group>"; };
 		5B7EB9410499542E8C5724F5 /* Pods-GrammarApp-GrammarAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GrammarApp-GrammarAppTests.debug.xcconfig"; path = "Target Support Files/Pods-GrammarApp-GrammarAppTests/Pods-GrammarApp-GrammarAppTests.debug.xcconfig"; sourceTree = "<group>"; };
 		5DCACB8F33CDC322A6C60F78 /* libPods-GrammarApp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-GrammarApp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		6D411F09C9394A21887D25D9 /* NunitoSans_10pt-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "NunitoSans_10pt-Regular.ttf"; path = "../source/assets/fonts/NunitoSans_10pt-Regular.ttf"; sourceTree = "<group>"; };
+		7937FBA1965B45B9BB250EB1 /* NunitoSans_10pt-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "NunitoSans_10pt-Medium.ttf"; path = "../source/assets/fonts/NunitoSans_10pt-Medium.ttf"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = GrammarApp/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-GrammarApp-GrammarAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GrammarApp-GrammarAppTests.release.xcconfig"; path = "Target Support Files/Pods-GrammarApp-GrammarAppTests/Pods-GrammarApp-GrammarAppTests.release.xcconfig"; sourceTree = "<group>"; };
+		A2027707F673415F88AD8E39 /* NunitoSans_10pt-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "NunitoSans_10pt-Bold.ttf"; path = "../source/assets/fonts/NunitoSans_10pt-Bold.ttf"; sourceTree = "<group>"; };
+		A73FF213598F43B3B8244AE0 /* NunitoSans_10pt-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "NunitoSans_10pt-SemiBold.ttf"; path = "../source/assets/fonts/NunitoSans_10pt-SemiBold.ttf"; sourceTree = "<group>"; };
+		D379D7E5E23C43649B7BB56B /* NunitoSans_10pt-ExtraBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "NunitoSans_10pt-ExtraBold.ttf"; path = "../source/assets/fonts/NunitoSans_10pt-ExtraBold.ttf"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		F8393FCA4B9943C28459DE46 /* NunitoSans_10pt-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "NunitoSans_10pt-Light.ttf"; path = "../source/assets/fonts/NunitoSans_10pt-Light.ttf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -127,6 +143,7 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				BBD78D7AC51CEA395F1C20DB /* Pods */,
+				DA71E87F9B064BEDA3EF18CD /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -151,6 +168,22 @@
 				89C6BE57DB24E9ADA2F236DE /* Pods-GrammarApp-GrammarAppTests.release.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		DA71E87F9B064BEDA3EF18CD /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				5A56D4E0F95D4174AA0A7B87 /* NunitoSans_10pt-Black.ttf */,
+				A2027707F673415F88AD8E39 /* NunitoSans_10pt-Bold.ttf */,
+				D379D7E5E23C43649B7BB56B /* NunitoSans_10pt-ExtraBold.ttf */,
+				35AB7B3131A34A93B3834565 /* NunitoSans_10pt-ExtraLight.ttf */,
+				F8393FCA4B9943C28459DE46 /* NunitoSans_10pt-Light.ttf */,
+				7937FBA1965B45B9BB250EB1 /* NunitoSans_10pt-Medium.ttf */,
+				6D411F09C9394A21887D25D9 /* NunitoSans_10pt-Regular.ttf */,
+				A73FF213598F43B3B8244AE0 /* NunitoSans_10pt-SemiBold.ttf */,
+			);
+			name = Resources;
+			path = "";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -249,6 +282,14 @@
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				57BC28B48A19F519D1B0D901 /* PrivacyInfo.xcprivacy in Resources */,
+				25CBBB32255B45BD8D3BA1DC /* NunitoSans_10pt-Black.ttf in Resources */,
+				960C6A21C3E54DC2977C2EFF /* NunitoSans_10pt-Bold.ttf in Resources */,
+				0A6491B8057D4D4E86D37BAE /* NunitoSans_10pt-ExtraBold.ttf in Resources */,
+				6857F02499B8422F90175287 /* NunitoSans_10pt-ExtraLight.ttf in Resources */,
+				39B6EBE4C1F842F3B59072A1 /* NunitoSans_10pt-Light.ttf in Resources */,
+				938D4D597BE24E9EBF7E3D59 /* NunitoSans_10pt-Medium.ttf in Resources */,
+				D4BEE1E12F444DC3B0DBEC74 /* NunitoSans_10pt-Regular.ttf in Resources */,
+				30B2D9713684405CAD8B4E40 /* NunitoSans_10pt-SemiBold.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

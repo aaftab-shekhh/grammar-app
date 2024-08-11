@@ -1,4 +1,3 @@
-import instance from '../axios/interceptors';
 import store from '../../redux/store';
 
 export const get_token = async () => {
@@ -31,7 +30,7 @@ export const get_data = async data => {
         Accept: '*/*',
         Authorization: `Bearer ${storeData?.auth?.user?.access_token}`,
       },
-      body: formData, // Use FormData as the body
+      body: formData,
     });
 
     if (!response.ok) {
@@ -43,10 +42,33 @@ export const get_data = async data => {
       throw new Error('Response is not JSON');
     }
 
-    const main_response = await response.json(); // Parse JSON response
+    const main_response = await response.json();
     return main_response;
   } catch (error) {
-    console.error('Fetch error:', error); // Log detailed error message
-    throw error; // Re-throw error to be handled by the caller
+    throw error;
+  }
+};
+
+export const get_mock = async () => {
+  try {
+    const main_response = await fetch(
+      'https://cl.englivia.com/api/category.php',
+    );
+    const response = await main_response.json();
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const get_mock_question = async id => {
+  try {
+    const main_response = await fetch(
+      `https://cl.englivia.com/api/question.php?category=${id}`,
+    );
+    const response = await main_response.json();
+    return response;
+  } catch (error) {
+    throw error;
   }
 };

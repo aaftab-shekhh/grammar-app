@@ -1,4 +1,3 @@
-import {useFocusEffect} from '@react-navigation/native';
 import React, {
   forwardRef,
   memo,
@@ -9,30 +8,28 @@ import React, {
 } from 'react';
 import {
   ActivityIndicator,
-  BackHandler,
   Modal,
   Pressable,
   StyleSheet,
   View,
 } from 'react-native';
+import {useDispatch, useSelector} from 'react-redux';
 import {colors} from '../../constants/colors';
+import {update_user} from '../../redux/store';
 import {get_data, get_token} from '../../utils/api';
 import Font400 from '../font/Font400';
 import Font700 from '../font/Font700';
-import {useDispatch, useSelector} from 'react-redux';
-import {update_user} from '../../redux/store';
 
 const LanguageChoiceModel = forwardRef((_, ref) => {
+  const user = useSelector(state => state?.auth);
+
   const [visible, setVisible] = useState(false);
   const [data, setData] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [loader, setLoader] = useState(true);
-
-  const user = useSelector(state => state?.auth);
-
-  useEffect(() => {
-    if (!user?.user?.language) setVisible(true);
-  }, [user]);
+  const [selectLanguage, setSelectedLanguage] = useState({
+    language: user?.user?.language,
+  });
 
   const dispatch = useDispatch();
 
@@ -40,24 +37,6 @@ const LanguageChoiceModel = forwardRef((_, ref) => {
     if (!user?.user?.language) return;
     setVisible(false);
   }, [user?.user?.language]);
-
-  useFocusEffect(
-    useCallback(() => {
-      const onBackPress = () => {
-        if (isOpen) {
-          setIsOpen(false);
-          close();
-          setIsOpen(false);
-          return true;
-        } else {
-          return true;
-        }
-      };
-      BackHandler.addEventListener('hardwareBackPress', onBackPress);
-      return () =>
-        BackHandler.removeEventListener('hardwareBackPress', onBackPress);
-    }, [isOpen]),
-  );
 
   useImperativeHandle(
     ref,
@@ -67,7 +46,7 @@ const LanguageChoiceModel = forwardRef((_, ref) => {
         close: close,
       };
     },
-    [close],
+    [],
   );
 
   const getData = useCallback(async () => {
@@ -79,7 +58,6 @@ const LanguageChoiceModel = forwardRef((_, ref) => {
       const response = await get_data(data);
       setData(response?.data);
     } catch (error) {
-      console.log('error', error);
     } finally {
       setLoader(false);
     }
@@ -108,7 +86,11 @@ const LanguageChoiceModel = forwardRef((_, ref) => {
 
   const onSelectHandler = useCallback(value => {
     dispatch(update_user({language: value?.id}));
-    close();
+    setSelectedLanguage({language: value?.id});
+    dispatch(update_user());
+    setTimeout(() => {
+      setVisible(false);
+    }, 100);
   }, []);
 
   return (
@@ -136,12 +118,11 @@ const LanguageChoiceModel = forwardRef((_, ref) => {
                     key={index?.toString()}
                     onPress={() => {
                       onSelectHandler(ele);
-                      close();
                     }}
                     style={styles.languageChoice}>
                     <Font400 style={styles.text}>{ele?.language}</Font400>
                     <View style={styles.radioButton}>
-                      {user?.user?.language === ele?.id ? (
+                      {selectLanguage?.language === ele?.id ? (
                         <View style={styles.selector} />
                       ) : null}
                     </View>

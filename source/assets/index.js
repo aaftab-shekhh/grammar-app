@@ -20,4 +20,8 @@ export const images = {
   course_white_icon: require('./Images/course_white_icon.png'),
   submit_your_rating: require('./Images/submit_your_rating.png'),
   item_bg_cover_image: require('./Images/item_bg_cover_image.png'),
+  add: require('./Images/add.png'),
+  logo: require('./Images/logo.png'),
+  close: require('./Images/close.png'),
+  mock: require('./Images/mock.png'),
 };

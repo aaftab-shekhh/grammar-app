@@ -23,10 +23,20 @@ const CourseItem = ({data}) => {
         ...data,
         screens_form: screens.LearnWithQuiz,
       });
-    } else {
+    } else if (type === '3') {
       navigate(screens.SelectSet, {
         ...data,
         type: '3',
+      });
+    } else if (type === '3') {
+      navigate(screens.SelectMock, {
+        ...data,
+        type: '4',
+      });
+    } else {
+      navigate(screens.CurrentAffairs, {
+        ...data,
+        type: '5',
       });
     }
   }, [data]);

@@ -1,11 +1,3 @@
-import {
-  BackHandler,
-  Modal,
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
 import React, {
   forwardRef,
   memo,
@@ -13,35 +5,17 @@ import React, {
   useImperativeHandle,
   useState,
 } from 'react';
-import {useFocusEffect} from '@react-navigation/native';
-import {colors} from '../../constants/colors';
-import Font600 from '../font/Font600';
+import {Modal, Pressable, StyleSheet, View} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import {images} from '../../assets';
+import {colors} from '../../constants/colors';
+import Font600 from '../font/Font600';
 import Button from '../styles/Button';
 
 const QuestionSubmitModel = forwardRef(({attempt, total, onSubmit}, ref) => {
   const [visible, setVisible] = useState(false);
 
   const close = useCallback(() => setVisible(false), []);
-
-  useFocusEffect(
-    useCallback(() => {
-      const onBackPress = () => {
-        if (visible) {
-          setVisible(false);
-          close();
-          setVisible(false);
-          return true;
-        } else {
-          return true;
-        }
-      };
-      BackHandler.addEventListener('hardwareBackPress', onBackPress);
-      return () =>
-        BackHandler.removeEventListener('hardwareBackPress', onBackPress);
-    }, [visible]),
-  );
 
   useImperativeHandle(
     ref,

@@ -19,6 +19,10 @@ import {get_token} from '../utils/api';
 import AboutUs from '../screens/AboutUs';
 import PrivacyPolicy from '../screens/PrivacyPolicy';
 import TermsConditions from '../screens/TermsConditions';
+import Instruction from '../screens/Instruction';
+import SelectMock from '../screens/SelectMock';
+import MockTest from '../screens/MockTest';
+import CurrentAffairs from '../screens/CurrentAffairs';
 
 const Stack = createNativeStackNavigator();
 
@@ -59,6 +63,8 @@ const Root = () => {
         <Stack.Screen name={screens.Home} component={Home} />
         <Stack.Screen name={screens.SelectLevel} component={SelectLevel} />
         <Stack.Screen name={screens.SelectSet} component={SelectSet} />
+        <Stack.Screen name={screens.SelectMock} component={SelectMock} />
+        <Stack.Screen name={screens.MockTest} component={MockTest} />
         <Stack.Screen
           name={screens.LearnWithImages}
           component={LearnWithImages}
@@ -66,11 +72,16 @@ const Root = () => {
         <Stack.Screen name={screens.LearnWithQuiz} component={LearnWithQuiz} />
         <Stack.Screen name={screens.AboutUs} component={AboutUs} />
         <Stack.Screen name={screens.PrivacyPolicy} component={PrivacyPolicy} />
+        <Stack.Screen name={screens.Instruction} component={Instruction} />
         <Stack.Screen
           name={screens.TermsConditions}
           component={TermsConditions}
         />
         <Stack.Screen name={screens.NewsPaper} component={NewsPaper} />
+        <Stack.Screen
+          name={screens.CurrentAffairs}
+          component={CurrentAffairs}
+        />
         <Stack.Screen
           name={screens.Settings}
           component={Setting}

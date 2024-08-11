@@ -55,6 +55,10 @@ const LearnWithImages = ({route}) => {
     }
   }, [currentIndex, data]);
 
+  const onFinishHandler = useCallback(() => {
+    goBack();
+  }, []);
+
   const onPrevHandler = useCallback(
     () => setCurrentIndex(prev => (prev >= 0 ? prev - 1 : prev)),
     [],
@@ -84,7 +88,13 @@ const LearnWithImages = ({route}) => {
         </View>
         <View style={styles.meaningContainer}>
           <Font800 style={styles.meaningTitle}>{'Sentence : '}</Font800>
-          <Font400 style={styles.meaningContent}>
+          <Font400
+            style={[
+              styles.meaningContent,
+              {
+                color: colors.color4682B4,
+              },
+            ]}>
             {data[currentIndex]?.detail}
           </Font400>
         </View>
@@ -108,7 +118,15 @@ const LearnWithImages = ({route}) => {
         ) : (
           <View />
         )}
-        {currentIndex + 1 === data.length ? null : (
+        {currentIndex + 1 === data.length ? (
+          <Button
+            onPress={onFinishHandler}
+            iconStyle={styles.buttonIcon}
+            buttonStyle={styles.next}
+            icon={images.arrow_right}>
+            {'Finish'}
+          </Button>
+        ) : (
           <Button
             onPress={onNextHandler}
             iconStyle={styles.buttonIcon}

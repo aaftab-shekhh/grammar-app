@@ -126,11 +126,12 @@ Download "Grammar Pro: English Learning" today and start your journey towards En
     <View style={styles.root}>
       <RatingModel ref={ratingModelRef} />
       <TostModel
-        onPress={async () =>
+        onPress={async () => {
+          contactRef.current?.close();
           Linking.openURL(
             'mailto:contactus.englivia@gmail.com?subject=SendMail&body=Description',
-          )
-        }
+          );
+        }}
         ref={contactRef}
         title={'Contact Us'}
         message={

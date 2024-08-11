@@ -1,4 +1,4 @@
-import React, {memo, useCallback, useRef} from 'react';
+import React, {memo, useCallback, useEffect, useRef} from 'react';
 import {ScrollView, StyleSheet, View} from 'react-native';
 import CourseListing from '../components/list/CourseListing';
 import ImageSlider from '../components/list/ImageSlider';
@@ -7,11 +7,23 @@ import {images} from '../assets';
 import {useNavigation} from '@react-navigation/native';
 import {screens} from '../constants/screens';
 import LanguageChoiceModel from '../components/model/LanguageChoiceModel';
+import LogoModel from '../components/model/LogoModel';
+import {useSelector} from 'react-redux';
 
 const Home = () => {
   const {navigate} = useNavigation();
-
+  const modelRef = useRef();
   const languageModelRef = useRef();
+
+  const user = useSelector(state => state?.auth);
+
+  useEffect(() => {
+    modelRef?.current?.open();
+  }, []);
+
+  const onCloseModelHandler = useCallback(() => {
+    if (!user?.user?.language) languageModelRef?.current?.open();
+  }, [user]);
 
   const onNavigateSetting = useCallback(() => navigate(screens.Settings), []);
 
@@ -22,6 +34,7 @@ const Home = () => {
 
   return (
     <View style={styles.root}>
+      <LogoModel onClose={onCloseModelHandler} ref={modelRef} />
       <CommonHead
         onPressLeft={onNavigateSetting}
         leftIcon={images.drawer}

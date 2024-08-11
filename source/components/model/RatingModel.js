@@ -1,11 +1,3 @@
-import {
-  BackHandler,
-  Modal,
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
 import React, {
   forwardRef,
   memo,
@@ -13,11 +5,11 @@ import React, {
   useImperativeHandle,
   useState,
 } from 'react';
+import {Linking, Modal, Pressable, StyleSheet} from 'react-native';
+import {colors} from '../../constants/colors';
 import Font400 from '../font/Font400';
 import Font700 from '../font/Font700';
 import Button from '../styles/Button';
-import {colors} from '../../constants/colors';
-import {useFocusEffect} from '@react-navigation/native';
 
 const RatingModel = forwardRef((props, ref) => {
   const [visible, setVisible] = useState(false);
@@ -30,24 +22,6 @@ const RatingModel = forwardRef((props, ref) => {
       return {open: () => setVisible(true), close: close};
     },
     [],
-  );
-
-  useFocusEffect(
-    useCallback(() => {
-      const onBackPress = () => {
-        if (visible) {
-          setVisible(false);
-          close();
-          setVisible(false);
-          return true;
-        } else {
-          return true;
-        }
-      };
-      BackHandler.addEventListener('hardwareBackPress', onBackPress);
-      return () =>
-        BackHandler.removeEventListener('hardwareBackPress', onBackPress);
-    }, [visible]),
   );
 
   return (
@@ -64,13 +38,27 @@ const RatingModel = forwardRef((props, ref) => {
               'If you like our app, please support us and rate on Google Play Market'
             }
           </Font400>
-          <Button buttonStyle={styles.button}>{'Sure, I Like It!'}</Button>
           <Button
+            onPress={() =>
+              Linking.openURL(
+                'https://play.google.com/store/apps/details?id=com.englivia.quiz',
+              )
+            }
+            buttonStyle={styles.button}>
+            {'Sure, I Like It!'}
+          </Button>
+          <Button
+            onPress={close}
             textStyle={styles.buttonText}
             buttonStyle={[styles.button, styles.whiteButton]}>
             {'Maybe Later'}
           </Button>
           <Button
+            onPress={() =>
+              Linking.openURL(
+                'https://play.google.com/store/apps/details?id=com.englivia.quiz',
+              )
+            }
             textStyle={styles.buttonText}
             buttonStyle={[
               styles.button,

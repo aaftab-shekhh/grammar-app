@@ -40,8 +40,6 @@ const SelectSet = ({route}) => {
   }
 
   const getData = useCallback(async () => {
-    console.log('user?.user?.language', user?.user?.language);
-
     let data = {
       access_key: 6808,
       get_learning: 1,
@@ -66,7 +64,6 @@ const SelectSet = ({route}) => {
 
     try {
       setLoader(true);
-      console.log('data', data);
       const response = await get_data(data);
 
       if (type === '1') {
@@ -79,8 +76,6 @@ const SelectSet = ({route}) => {
       setLoader(false);
     }
   }, [id, type, user]);
-
-  console.log('loader', loader);
 
   useEffect(() => {
     getData();

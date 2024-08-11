@@ -1,10 +1,9 @@
 import {useNavigation} from '@react-navigation/native';
 import React, {memo, useCallback, useEffect, useState} from 'react';
 import {ScrollView, StyleSheet, View} from 'react-native';
-import RenderHtml from 'react-native-render-html';
 import {images} from '../assets';
+import Font400 from '../components/font/Font400';
 import CommonHead from '../components/styles/CommonHead';
-import {deviceWidth} from '../constants/constants';
 import {get_data} from '../utils/api';
 
 const TermsConditions = () => {
@@ -34,8 +33,12 @@ const TermsConditions = () => {
     getData();
   }, []);
 
-  const source = {
-    html: `${termsConditions}`,
+  const stripHtml = html => {
+    const regex = /(<([^>]+)>)/gi;
+    let text = html.replace(/<br\s*\/?>/gi, '\n'); // Replace <br> tags with new lines
+    text = text.replace(/<\/p>/gi, '\n\n'); // Replace </p> tags with double new lines for paragraph breaks
+    text = text.replace(regex, ''); // Strip remaining HTML tags
+    return text;
   };
 
   return (
@@ -47,8 +50,8 @@ const TermsConditions = () => {
       />
       <ScrollView
         style={styles.content}
-        contentContainerStyle={{flexGrow: 1, paddingBottom: 100}}>
-        <RenderHtml contentWidth={deviceWidth} source={source} />
+        contentContainerStyle={{flexGrow: 1, paddingVertical: 50}}>
+        <Font400>{stripHtml(termsConditions)}</Font400>
       </ScrollView>
     </View>
   );

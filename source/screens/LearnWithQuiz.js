@@ -13,11 +13,14 @@ import CommonHead from '../components/styles/CommonHead';
 import ProgressBar from '../components/styles/ProgressBar';
 import {colors} from '../constants/colors';
 import {get_data} from '../utils/api';
+import {useSelector} from 'react-redux';
 
 const LearnWithQuiz = ({route}) => {
   const {title, id, category_name, type} = route?.params?.data;
 
   const {goBack} = useNavigation();
+
+  const user = useSelector(state => state?.auth);
 
   const [data, setData] = useState([]);
   const [loader, setLoader] = useState(false);
@@ -56,8 +59,9 @@ const LearnWithQuiz = ({route}) => {
   const getData = useCallback(async () => {
     let data = {
       access_key: 6808,
-      get_questions_by_learning: 1,
       learning_id: id,
+      get_questions_by_learning: 1,
+      language_id: user?.user?.language,
     };
 
     if (type === '1') {
@@ -71,6 +75,7 @@ const LearnWithQuiz = ({route}) => {
     try {
       setLoader(true);
       const response = await get_data(data);
+
       const newData = response?.data?.map(item => {
         const options = [
           item?.optiona,
