@@ -7,22 +7,27 @@ import {useDispatch, useSelector} from 'react-redux';
 import {colors} from '../constants/colors';
 import {screens} from '../constants/screens';
 import {update_user} from '../redux/store';
+import AboutUs from '../screens/AboutUs';
+import CurrentAffairs from '../screens/CurrentAffairs';
 import Home from '../screens/Home';
+import Instruction from '../screens/Instruction';
 import LearnWithImages from '../screens/LearnWithImages';
 import LearnWithQuiz from '../screens/LearnWithQuiz';
+import MCQListing from '../screens/MCQListing';
+import MockTest from '../screens/MockTest';
+import MonthListing from '../screens/MonthListing';
 import NewsPaper from '../screens/NewsPaper';
+import PDFView from '../screens/PDFView';
+import PrivacyPolicy from '../screens/PrivacyPolicy';
 import SelectLevel from '../screens/SelectLevel';
+import SelectMock from '../screens/SelectMock';
 import SelectSet from '../screens/SelectSet';
 import Setting from '../screens/Setting';
+import TermsConditions from '../screens/TermsConditions';
 import {error} from '../tost/error';
 import {get_token} from '../utils/api';
-import AboutUs from '../screens/AboutUs';
-import PrivacyPolicy from '../screens/PrivacyPolicy';
-import TermsConditions from '../screens/TermsConditions';
-import Instruction from '../screens/Instruction';
-import SelectMock from '../screens/SelectMock';
-import MockTest from '../screens/MockTest';
-import CurrentAffairs from '../screens/CurrentAffairs';
+import MSQQuestion from '../screens/MSQQuestion';
+import Score from '../screens/Score';
 
 const Stack = createNativeStackNavigator();
 
@@ -73,6 +78,17 @@ const Root = () => {
         <Stack.Screen name={screens.AboutUs} component={AboutUs} />
         <Stack.Screen name={screens.PrivacyPolicy} component={PrivacyPolicy} />
         <Stack.Screen name={screens.Instruction} component={Instruction} />
+        <Stack.Screen name={screens.PDFView} component={PDFView} />
+        <Stack.Screen name={screens.MCQListing} component={MCQListing} />
+        <Stack.Screen name={screens.MonthListing} component={MonthListing} />
+        <Stack.Screen name={screens.MSQQuestion} component={MSQQuestion} />
+        <Stack.Screen
+          options={{
+            animation: 'slide_from_bottom',
+          }}
+          name={screens.Score}
+          component={Score}
+        />
         <Stack.Screen
           name={screens.TermsConditions}
           component={TermsConditions}

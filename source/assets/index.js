@@ -24,4 +24,5 @@ export const images = {
   logo: require('./Images/logo.png'),
   close: require('./Images/close.png'),
   mock: require('./Images/mock.png'),
+  dropIcon: require('./Images/dropIcon.png'),
 };

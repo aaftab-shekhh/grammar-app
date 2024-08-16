@@ -203,7 +203,8 @@ const LearnWithQuizTest = ({route}) => {
                 ]}>
                 <View style={styles.answerTextContainer}>
                   <Font600 style={styles.answerText}>
-                    {String.fromCharCode(65 + index) + '. ' + ele}
+                    {/* {String.fromCharCode(65 + index) + '. ' + ele} */}
+                    {ele}
                   </Font600>
                 </View>
                 {selectedAnswer ? (

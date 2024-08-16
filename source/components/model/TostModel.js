@@ -14,7 +14,9 @@ import Button from '../styles/Button';
 const TostModel = forwardRef(({title, message, onPress, rightButton}, ref) => {
   const [visible, setVisible] = useState(false);
 
-  const close = useCallback(() => setVisible(false), []);
+  const close = useCallback(() => {
+    setVisible(false);
+  }, []);
 
   useImperativeHandle(
     ref,

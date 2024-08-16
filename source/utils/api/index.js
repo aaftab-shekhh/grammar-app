@@ -61,6 +61,30 @@ export const get_mock = async () => {
   }
 };
 
+export const get_mcq = async () => {
+  try {
+    const main_response = await fetch(
+      'https://cl.englivia.com/api/category.php?type=2',
+    );
+    const response = await main_response.json();
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const get_pdf = async () => {
+  try {
+    const main_response = await fetch(
+      'https://cl.englivia.com/api/pdf.php?type=2',
+    );
+    const response = await main_response.json();
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const get_mock_question = async id => {
   try {
     const main_response = await fetch(

@@ -37,7 +37,9 @@ const CommonHead = props => {
         ) : (
           <></>
         )}
-        <Font700 style={styles.title}>{title}</Font700>
+        <Font700 numberOfLines={1} style={styles.title}>
+          {title}
+        </Font700>
         {rightIcon ? (
           <Pressable
             onPress={onPressRight}
@@ -107,6 +109,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 18,
     color: colors.white,
+    paddingHorizontal: 50,
   },
   circle1: {
     zIndex: -1,

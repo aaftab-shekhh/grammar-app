@@ -8,20 +8,152 @@ import Font600 from '../components/font/Font600';
 import Font700 from '../components/font/Font700';
 import QuestionSubmitModel from '../components/model/QuestionSubmitModel';
 import ScoreModel from '../components/model/ScoreModel';
-import TostModel from '../components/model/TostModel';
 import Button from '../components/styles/Button';
 import CommonHead from '../components/styles/CommonHead';
 import ProgressBar from '../components/styles/ProgressBar';
 import {colors} from '../constants/colors';
-import {screens} from '../constants/screens';
-import {get_mock_question} from '../utils/api';
+import {get_data} from '../utils/api';
+import {useSelector} from 'react-redux';
 
-const LearnWithQuiz = ({route}) => {
-  const {id, category_name, type} = route?.params?.data;
+const MSQQuestion = ({route}) => {
+  const {title, id, category_name, type} = route?.params?.data;
 
-  const {goBack, navigate} = useNavigation();
-  const [data, setData] = useState([]);
-  const [remainingTime, setRemainingTime] = useState();
+  const {goBack} = useNavigation();
+
+  const user = useSelector(state => state?.auth);
+
+  const [data, setData] = useState([
+    {
+      answer: 'Clumsy, shapeless',
+      id: '3095',
+      learning_id: '236',
+      note: 'All thumbs = কদাকার, ঢেপসা -- এটা হল সঠিক উত্তর । ',
+      optiona: 'Clumsy, shapeless',
+      optionb: 'Indifference',
+      optionc: 'Disgusting',
+      optiond: 'Respect',
+      optione: '',
+      question: 'All thumbs ',
+      question_type: '1',
+    },
+    {
+      answer: 'An Insecure Scheme',
+      id: '1707',
+      learning_id: '236',
+      note: 'A house of cards = খুব পলকা scheme যাতে খুব সহজেই লোকসান হতে পারে -- এটি হল সঠিক উত্তর । ',
+      optiona: 'An Insecure Scheme',
+      optionb: 'Prohibition',
+      optionc: 'Bet',
+      optiond: 'Progress',
+      optione: '',
+      question: 'A house of cards ',
+      question_type: '1',
+    },
+    {
+      answer: 'Cemetery, Adjacent To The Church',
+      id: '1706',
+      learning_id: '236',
+      note: 'God’s acre = কবর স্থান, গীর্জাসংলগ্ন -- এটি হল সঠিক উত্তর । ',
+      optiona: 'Heaven',
+      optionb: 'Cemetery, Adjacent To The Church',
+      optionc: 'Question',
+      optiond: 'Puzzle',
+      optione: '',
+      question: 'God’s acre ',
+      question_type: '1',
+    },
+    {
+      answer: 'Stupid',
+      id: '1705',
+      learning_id: '236',
+      note: 'A God’s ape = জন্মমূর্খ -- এটি হল সঠিক উত্তর ।',
+      optiona: 'Strong',
+      optionb: 'None of these',
+      optionc: 'Famous',
+      optiond: 'Stupid',
+      optione: '',
+      question: 'A God’s ape ',
+      question_type: '1',
+    },
+    {
+      answer: 'Stupid, Foolish, Ignorant',
+      id: '1704',
+      learning_id: '236',
+      note: 'As daft as a brush = মূর্খ, বোকা, অজ্ঞ -- এটি হল সঠিক উত্তর । ',
+      optiona: 'Stupid, Foolish, Ignorant',
+      optionb: 'Initiative',
+      optionc: 'Primary',
+      optiond: 'The beginning',
+      optione: '',
+      question: 'As daft as a brush ',
+      question_type: '1',
+    },
+    {
+      answer: 'Be Careful',
+      id: '1703',
+      learning_id: '236',
+      note: 'Argus eyed = সতর্ক -- এটি হল সঠিক উত্তর ।',
+      optiona: 'Happiness',
+      optionb: 'Aishwarya',
+      optionc: 'Praise',
+      optiond: 'Be Careful',
+      optione: '',
+      question: 'Argus eyed ',
+      question_type: '1',
+    },
+    {
+      answer: 'Too Busy',
+      id: '1702',
+      learning_id: '236',
+      note: 'All go=খুব ব্যস্ত-এটি হল সঠিক উত্তর । ',
+      optiona: 'Scheduled',
+      optionb: 'Too Busy',
+      optionc: 'Ambitious',
+      optiond: 'Conversation',
+      optione: '',
+      question: 'All go ',
+      question_type: '1',
+    },
+    {
+      answer: 'Not Understandable',
+      id: '1701',
+      learning_id: '236',
+      note: 'All Latin and Greek=বোধগম্য নয়-এটি হল সঠিক উত্তর ।',
+      optiona: 'Not Understandable',
+      optionb: 'Cancel',
+      optionc: 'To destroy',
+      optiond: 'Initiative',
+      optione: '',
+      question: 'All Latin and Greek ',
+      question_type: '1',
+    },
+    {
+      answer: 'Completely False',
+      id: '1700',
+      learning_id: '236',
+      note: 'All moonshine=সম্পূর্ণ মিথ্যা-এটি হল সঠিক উত্তর । ',
+      optiona: 'Dirty',
+      optionb: 'Completely False',
+      optionc: 'Conversation',
+      optiond: 'Respect',
+      optione: '',
+      question: 'All moonshine ',
+      question_type: '1',
+    },
+    {
+      answer: 'Very Excited',
+      id: '1699',
+      learning_id: '236',
+      note: 'All agog=খুব উৎসাহিত-এটি হল সঠিক উত্তর । ',
+      optiona: 'Empathy',
+      optionb: 'Scheduled',
+      optionc: 'Agreement',
+      optiond: 'Very Excited',
+      optione: '',
+      question: 'All agog ',
+      question_type: '1',
+    },
+  ]);
   const [loader, setLoader] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [progress, setProgress] = useState(0);
@@ -32,8 +164,6 @@ const LearnWithQuiz = ({route}) => {
 
   const questionModel = useRef();
   const scoreModel = useRef();
-  const intervalRef = useRef();
-  const andTestModel = useRef();
 
   useEffect(() => {
     if (
@@ -58,11 +188,26 @@ const LearnWithQuiz = ({route}) => {
   }, [rightAnswerCount, wrongAnswerCount, skipAnswerCount, data]);
 
   const getData = useCallback(async () => {
+    let data = {
+      access_key: 6808,
+      learning_id: id,
+      get_questions_by_learning: 1,
+      language_id: user?.user?.language,
+    };
+
+    if (type === '1') {
+      data = {
+        access_key: 6808,
+        get_questions_by_subcategory: 1,
+        subcategory: id,
+      };
+    }
+
     try {
       setLoader(true);
-      const response = await get_mock_question(id);
+      const response = await get_data(data);
 
-      const newData = response?.response?.map(item => {
+      const newData = response?.data?.map(item => {
         const options = [
           item?.optiona,
           item?.optionb,
@@ -70,20 +215,19 @@ const LearnWithQuiz = ({route}) => {
           item?.optiond,
         ];
 
+        const answer = item?.optiona;
+
+        options.sort(() => Math.random() - 0.5); // Shuffle options randomly
+
+        const correctOptionIndex = options.indexOf(answer);
+
         return {
-          ...item,
+          ...item, // Spread existing properties
           optiona: options[0],
           optionb: options[1],
           optionc: options[2],
           optiond: options[3],
-          answer:
-            item?.answer === 'optiona'
-              ? options[0]
-              : item?.answer === 'optionb'
-              ? options[1]
-              : item?.answer === 'optionc'
-              ? options[2]
-              : options[3],
+          answer: options[correctOptionIndex], // Update answer to character
         };
       });
 
@@ -117,27 +261,6 @@ const LearnWithQuiz = ({route}) => {
   }, [data, selectedAnswer]);
 
   useEffect(() => {
-    if (data?.length === 0) return;
-    setRemainingTime(parseInt(data?.[currentIndex]?.duration));
-  }, [data, currentIndex]);
-
-  useEffect(() => {
-    if (data?.length === 0) return;
-    intervalRef.current = setInterval(() => {
-      setRemainingTime(prevTime => {
-        if (prevTime <= 1000) {
-          clearInterval(intervalRef.current);
-          onNextHandler();
-          return 0;
-        }
-        return prevTime - 1000;
-      });
-    }, 1000);
-
-    return () => clearInterval(intervalRef.current);
-  }, [currentIndex, data]);
-
-  useEffect(() => {
     if (data?.length !== 0)
       setProgress(((currentIndex + 1) * 100) / data?.length);
   }, [currentIndex, data]);
@@ -156,26 +279,8 @@ const LearnWithQuiz = ({route}) => {
   );
 
   const onSubmitHandler = useCallback(() => {
-    // questionModel?.current?.close();
-    // scoreModel?.current?.open();
-
-    andTestModel?.current?.close();
-    navigate(screens.Score, {
-      right: rightAnswerCount,
-      wrong: wrongAnswerCount,
-      total: data?.length,
-      title: 'Result : ' + category_name,
-      list: data,
-    });
-  }, [rightAnswerCount, wrongAnswerCount, data, category_name]);
-
-  const formatTime = milliseconds => {
-    const seconds = Math.floor(milliseconds / 1000);
-    return `${seconds} sec`;
-  };
-
-  const onEndTestModelOpen = useCallback(() => {
-    andTestModel?.current?.open();
+    questionModel?.current?.close();
+    scoreModel?.current?.open();
   }, []);
 
   return (
@@ -193,32 +298,12 @@ const LearnWithQuiz = ({route}) => {
         total={data?.length}
         title={'Result : ' + category_name}
       />
-      <TostModel
-        ref={andTestModel}
-        onPress={onSubmitHandler}
-        title={'Confirm Test End'}
-        message={
-          "Are you sure you want to end the test here? All progress will be saved, but you won't be able to return and make any changes. Do you want to continue?"
-        }
-      />
       <CommonHead
         leftIcon={images.arrow_left}
         onPressLeft={goBack}
         title={category_name}
         extraHeight={33}>
-        <Font600 style={styles.heading}>{formatTime(remainingTime)}</Font600>
-        <View style={styles.headingContainer}>
-          <Pressable style={styles.headingButton}>
-            <FastImage
-              style={styles.gridIcon}
-              source={images.drawer}
-              resizeMode="contain"
-            />
-          </Pressable>
-          <Pressable onPress={onEndTestModelOpen} style={styles.headingButton}>
-            <Font600 style={styles.endTest}>{'End test'}</Font600>
-          </Pressable>
-        </View>
+        <Font600 style={styles.heading}>{title}</Font600>
       </CommonHead>
       <ScrollView
         showsVerticalScrollIndicator={false}
@@ -326,34 +411,17 @@ const LearnWithQuiz = ({route}) => {
   );
 };
 
-export default memo(LearnWithQuiz);
+export default memo(MSQQuestion);
 
 const styles = StyleSheet.create({
   root: {
     flex: 1,
   },
   heading: {
-    top: 28,
+    top: 22,
     fontSize: 16,
     color: colors.white,
-  },
-  headingContainer: {
-    flexDirection: 'row-reverse',
-  },
-  endTest: {
-    color: colors.white,
-  },
-  headingButton: {
-    height: 28,
-    borderRadius: 6,
-    paddingHorizontal: 16,
-    justifyContent: 'center',
-    backgroundColor: colors.color125A92,
-    marginHorizontal: 10,
-  },
-  gridIcon: {
-    width: 16,
-    height: 16,
+    textAlign: 'center',
   },
   container: {
     flexGrow: 1,

@@ -216,7 +216,8 @@ const LearnWithQuiz = ({route}) => {
                 ]}>
                 <View style={styles.answerTextContainer}>
                   <Font600 style={styles.answerText}>
-                    {String.fromCharCode(65 + index) + '. ' + ele}
+                    {/* {String.fromCharCode(65 + index) + '. ' + ele} */}
+                    {ele}
                   </Font600>
                 </View>
                 {selectedAnswer ? (
@@ -307,7 +308,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 8,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: colors.colorDCF9FF,
+    backgroundColor: colors.colorF0FFFF,
     borderColor: colors.transparent_black_10,
   },
   questionTitle: {
@@ -349,6 +350,7 @@ const styles = StyleSheet.create({
   answerText: {
     fontSize: 18,
     paddingRight: 20,
+    paddingLeft: 10,
   },
   noteContainer: {
     padding: 20,

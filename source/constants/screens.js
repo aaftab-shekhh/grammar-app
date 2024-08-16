@@ -14,4 +14,9 @@ export const screens = {
   SelectMock: 'SelectMockScreen',
   MockTest: 'MockTestScreen',
   CurrentAffairs: 'CurrentAffairsScreen',
+  PDFView: 'PDFViewScreen',
+  MonthListing: 'MonthListingScreen',
+  MCQListing: 'MCQListingScreen',
+  MSQQuestion: 'MSQQuestionScreen',
+  Score: 'ScoreScreen',
 };

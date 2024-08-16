@@ -37,14 +37,14 @@ const Instruction = ({route}) => {
 
   return (
     <View style={styles.root}>
+      <CommonHead
+        leftIcon={images.arrow_left}
+        onPressLeft={goBack}
+        title={category_name}
+      />
       <ScrollView
         contentContainerStyle={{flexGrow: 1}}
         showsVerticalScrollIndicator={false}>
-        <CommonHead
-          leftIcon={images.arrow_left}
-          onPressLeft={goBack}
-          title={category_name}
-        />
         <View style={styles.titleContainer}>
           <FastImage
             style={styles.mockIcon}
@@ -72,11 +72,13 @@ const Instruction = ({route}) => {
           </View>
         </View>
         <View style={styles.instructionContainer}>
-          {Object.values(instructions).map((instruction, index) => (
-            <Font400 key={index} style={styles.instructionText}>
-              {instruction}
-            </Font400>
-          ))}
+          {instructions
+            ? Object.values(instructions).map((instruction, index) => (
+                <Font400 key={index} style={styles.instructionText}>
+                  {instruction}
+                </Font400>
+              ))
+            : null}
         </View>
         <Button onPress={onNavigateMockTest} buttonStyle={styles.button}>
           {'Start'}
@@ -99,11 +101,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   mockIcon: {
-    height: 120,
-    width: 120,
+    width: 100,
+    height: 100,
   },
   title: {
-    fontSize: 28,
+    flex: 1,
+    fontSize: 18,
     paddingHorizontal: 12,
   },
   testDetailContainer: {
@@ -136,5 +139,6 @@ const styles = StyleSheet.create({
     height: 48,
     marginHorizontal: 24,
     marginTop: 30,
+    marginBottom: 20,
   },
 });

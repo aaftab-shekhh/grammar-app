@@ -28,7 +28,7 @@ const CourseItem = ({data}) => {
         ...data,
         type: '3',
       });
-    } else if (type === '3') {
+    } else if (type === '4') {
       navigate(screens.SelectMock, {
         ...data,
         type: '4',

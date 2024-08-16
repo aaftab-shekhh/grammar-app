@@ -32,7 +32,7 @@ const CourseListing = () => {
         ...response?.data,
         ...response_2?.data?.reverse(),
         {category_name: 'Newspaper Words', type: '3'},
-        {category_name: 'Mock Test ', type: '4'},
+        {category_name: 'SSC PYQ Test', type: '4'},
         {category_name: 'Current Affairs ', type: '5'},
       ]);
     } catch (error) {

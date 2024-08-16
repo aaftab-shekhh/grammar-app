@@ -37,7 +37,7 @@ const ProgressBar = ({
       <Font600
         style={
           styles.title
-        }>{`Question ${totalQuestion} of ${completedQuestion}`}</Font600>
+        }>{`Question ${completedQuestion} of ${totalQuestion}`}</Font600>
     </View>
   );
 };
