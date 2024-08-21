@@ -82,8 +82,6 @@ const LearnWithQuiz = ({route}) => {
       setLoader(true);
       const response = await get_data(data);
 
-      console.log('response?.data[0]', response?.data[1])
-
       const newData = response?.data?.map(item => {
         const options = [
           item?.optiona,
@@ -92,7 +90,14 @@ const LearnWithQuiz = ({route}) => {
           item?.optiond,
         ];
 
-        const answer = item?.optiona;
+        const answer =
+          item?.answer?.toString()?.toLowerCase() === 'a'
+            ? item?.optiona
+            : item?.answer?.toString()?.toLowerCase() === 'b'
+            ? item?.optionb
+            : item?.answer?.toString()?.toLowerCase() === 'c'
+            ? item?.optionc
+            : item?.optiond;
 
         options.sort(() => Math.random() - 0.5);
 
@@ -182,10 +187,7 @@ const LearnWithQuiz = ({route}) => {
         extraHeight={33}>
         <Font600 style={styles.heading}>{title}</Font600>
       </CommonHead>
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.container}
-        bounces={false}>
+      <View style={styles.container}>
         <View style={styles.progressContainer}>
           {progress ? (
             <ProgressBar
@@ -200,9 +202,13 @@ const LearnWithQuiz = ({route}) => {
         </View>
         <View style={styles.questionContainer}>
           {data[currentIndex]?.question ? (
-            <Font600 style={styles.questionTitle}>
-              {data[currentIndex]?.question}
-            </Font600>
+            <ScrollView
+              contentContainerStyle={{flexGrow: 1, justifyContent: 'center'}}
+              bounces={false}>
+              <Font600 style={styles.questionTitle}>
+                {data[currentIndex]?.question}
+              </Font600>
+            </ScrollView>
           ) : null}
         </View>
         <View style={styles.answerContainer}>
@@ -252,7 +258,7 @@ const LearnWithQuiz = ({route}) => {
             </Font400>
           ) : null}
         </View>
-      </ScrollView>
+      </View>
       <View style={styles.buttonContainer}>
         <View />
 
@@ -319,6 +325,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.colorF0FFFF,
     borderColor: colors.transparent_black_10,
     paddingHorizontal: 20,
+    paddingVertical: 20,
   },
   questionTitle: {
     fontSize: 18,

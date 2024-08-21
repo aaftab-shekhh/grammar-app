@@ -12,7 +12,7 @@ import Button from '../components/styles/Button';
 import CommonHead from '../components/styles/CommonHead';
 import ProgressBar from '../components/styles/ProgressBar';
 import {colors} from '../constants/colors';
-import {get_data, get_mcq_test_question} from '../utils/api';
+import {get_mcq_test_question} from '../utils/api';
 import {useSelector} from 'react-redux';
 import {error} from '../tost/error';
 
@@ -198,6 +198,8 @@ const MSQQuestion = ({route}) => {
       setLoader(true);
       const response = await get_mcq_test_question(data);
 
+      console.log('first', response);
+
       const newData = response?.data?.map(item => {
         const options = [
           item?.optiona,
@@ -297,10 +299,7 @@ const MSQQuestion = ({route}) => {
         extraHeight={33}>
         <Font600 style={styles.heading}>{title}</Font600>
       </CommonHead>
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.container}
-        bounces={false}>
+      <View style={styles.container}>
         <View style={styles.progressContainer}>
           {progress ? (
             <ProgressBar
@@ -315,9 +314,14 @@ const MSQQuestion = ({route}) => {
         </View>
         <View style={styles.questionContainer}>
           {data?.[currentIndex]?.question ? (
-            <Font600 style={styles.questionTitle}>
-              {data?.[currentIndex]?.question}
-            </Font600>
+            <ScrollView
+              f
+              contentContainerStyle={{flexGrow: 1, justifyContent: 'center'}}
+              bounces={false}>
+              <Font600 style={styles.questionTitle}>
+                {data?.[currentIndex]?.question}
+              </Font600>
+            </ScrollView>
           ) : null}
         </View>
         <View style={styles.answerContainer}>
@@ -367,7 +371,7 @@ const MSQQuestion = ({route}) => {
             </Font400>
           ) : null}
         </View>
-      </ScrollView>
+      </View>
       <View style={styles.buttonContainer}>
         <View />
 
@@ -434,6 +438,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.colorF0FFFF,
     borderColor: colors.transparent_black_10,
     paddingHorizontal: 20,
+    paddingVertical: 20,
   },
   questionTitle: {
     fontSize: 18,

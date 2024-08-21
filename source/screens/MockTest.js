@@ -70,12 +70,32 @@ const MockTest = ({route}) => {
       const response = await get_mock_question(id);
 
       const newData = response?.response?.map(item => {
+        console.log(
+          'first',
+          item?.answer,
+          item?.answer?.toString()?.toLowerCase() === 'a'
+            ? item?.optiona
+            : item?.answer?.toString()?.toLowerCase() === 'b'
+            ? item?.optionb
+            : item?.answer?.toString()?.toLowerCase() === 'c'
+            ? item?.optionc
+            : item?.optiond,
+        );
         const options = [
           item?.optiona,
           item?.optionb,
           item?.optionc,
           item?.optiond,
         ];
+
+        const answer =
+          item?.answer?.toString()?.toLowerCase() === 'a'
+            ? item?.optiona
+            : item?.answer?.toString()?.toLowerCase() === 'b'
+            ? item?.optionb
+            : item?.answer?.toString()?.toLowerCase() === 'c'
+            ? item?.optionc
+            : item?.optiond;
 
         return {
           ...item,
@@ -84,14 +104,7 @@ const MockTest = ({route}) => {
           optionb: options[1],
           optionc: options[2],
           optiond: options[3],
-          answer:
-            item?.answer === 'optiona'
-              ? options[0]
-              : item?.answer === 'optionb'
-              ? options[1]
-              : item?.answer === 'optionc'
-              ? options[2]
-              : options[3],
+          answer: answer,
         };
       });
 
@@ -196,7 +209,7 @@ const MockTest = ({route}) => {
 
   const handlePressForCorrect = useCallback(() => {
     Animated.timing(animationCorrect, {
-      toValue: -120,
+      toValue: -140,
       duration: 300,
       useNativeDriver: true,
     }).start(() => {
@@ -212,7 +225,7 @@ const MockTest = ({route}) => {
 
   const handlePressForIncorrect = () => {
     Animated.timing(animationIncorrect, {
-      toValue: -120,
+      toValue: -140,
       duration: 300,
       useNativeDriver: true,
     }).start(() => {
@@ -268,10 +281,10 @@ const MockTest = ({route}) => {
           </Pressable>
         </View>
       </CommonHead>
-      <ScrollView
-        showsVerticalScrollIndicator={false}
+      {/* showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.container}
-        bounces={false}>
+        bounces={false} */}
+      <View style={styles.container}>
         <View style={styles.progressContainer}>
           {progress ? (
             <ProgressBar
@@ -303,14 +316,18 @@ const MockTest = ({route}) => {
             <Font400 style={styles.markText}>{'+2'}</Font400>
           </Pressable>
           <Pressable onPress={handlePressForIncorrect} style={styles.mark}>
-            <Font400 style={styles.markText}>{'-5'}</Font400>
+            <Font400 style={styles.markText}>{'-0.5'}</Font400>
           </Pressable>
         </View>
         <View style={styles.questionContainer}>
           {data[currentIndex]?.question ? (
-            <Font600 style={styles.questionTitle}>
-              {data[currentIndex]?.question}
-            </Font600>
+            <ScrollView
+              contentContainerStyle={{flexGrow: 1, justifyContent: 'center'}}
+              bounces={false}>
+              <Font600 style={styles.questionTitle}>
+                {data[currentIndex]?.question}
+              </Font600>
+            </ScrollView>
           ) : null}
         </View>
         <View style={styles.answerContainer}>
@@ -323,10 +340,8 @@ const MockTest = ({route}) => {
                 style={[
                   styles.answer,
                   selectedAnswer
-                    ? data[currentIndex].answer === ele
+                    ? selectedAnswer === ele
                       ? styles.rightAnswer
-                      : selectedAnswer === ele
-                      ? styles.wrongAnswer
                       : null
                     : null,
                 ]}>
@@ -339,11 +354,7 @@ const MockTest = ({route}) => {
                 {selectedAnswer ? (
                   <FastImage
                     source={
-                      data[currentIndex].answer === ele
-                        ? images.correct_answer
-                        : selectedAnswer === ele
-                        ? images.wrong_answer
-                        : null
+                      selectedAnswer === ele ? images.correct_answer : null
                     }
                     style={styles.icon}
                     resizeMode="contain"
@@ -360,7 +371,7 @@ const MockTest = ({route}) => {
             </Font400>
           ) : null}
         </View>
-      </ScrollView>
+      </View>
       <View style={styles.buttonContainer}>
         <View />
 
@@ -474,6 +485,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.colorF0FFFF,
     borderColor: colors.transparent_black_10,
     paddingHorizontal: 20,
+    paddingVertical: 20,
   },
   questionTitle: {
     fontSize: 18,
