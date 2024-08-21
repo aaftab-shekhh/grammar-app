@@ -33,7 +33,10 @@ const CourseListing = () => {
         ...response_2?.data?.reverse(),
         {category_name: 'Newspaper Words', type: '3'},
         {category_name: 'SSC PYQ Test', type: '4'},
-        {category_name: 'Current Affairs ', type: '5'},
+        {category_name: 'Current Affairs', type: '5'},
+        {category_name: 'One Line Translation', type: '6'},
+        {category_name: 'Paragraph Translation', type: '7'},
+        {category_name: 'Sentence Structure', type: '8'},
       ]);
     } catch (error) {
     } finally {

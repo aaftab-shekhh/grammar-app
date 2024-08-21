@@ -102,7 +102,10 @@ const Score = ({route}) => {
     <View style={styles.root}>
       <CommonHead
         leftIcon={images.arrow_left}
-        onPressLeft={navigate.bind(null, screens.SelectMock)}
+        onPressLeft={navigate.bind(null, screens.SelectMock, {
+          category_name: 'SSC PYQ Test',
+          type: '4',
+        })}
         title={title}
       />
       <View style={styles.tabContainer}>

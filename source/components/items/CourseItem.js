@@ -33,10 +33,28 @@ const CourseItem = ({data}) => {
         ...data,
         type: '4',
       });
-    } else {
+    } else if (type === '5') {
       navigate(screens.CurrentAffairs, {
         ...data,
         type: '5',
+      });
+    } else if (type === '6') {
+      navigate(screens.MonthListing, {
+        ...data,
+        screens_form: screens.PDFView,
+        type: '6',
+      });
+    } else if (type === '7') {
+      navigate(screens.MonthListing, {
+        ...data,
+        screens_form: screens.PDFView,
+        type: '7',
+      });
+    } else if (type === '8') {
+      navigate(screens.MonthListing, {
+        ...data,
+        screens_form: screens.PDFView,
+        type: '8',
       });
     }
   }, [data]);

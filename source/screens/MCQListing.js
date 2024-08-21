@@ -6,40 +6,36 @@ import Font700 from '../components/font/Font700';
 import SelectItem from '../components/items/SelectItem';
 import CommonHead from '../components/styles/CommonHead';
 import {colors} from '../constants/colors';
-import {get_data} from '../utils/api';
-import {useSelector} from 'react-redux';
 import {screens} from '../constants/screens';
+import {error} from '../tost/error';
+import {get_mcq_test} from '../utils/api';
 
 const MCQListing = ({route}) => {
   const route_data = route?.params?.data;
-  const {title, category_name} = route_data;
-  const [list, setList] = useState([
-    {
-      title: 'Test 1',
-      no_of: 10,
-    },
-    {
-      title: 'Test 2',
-      no_of: 10,
-    },
-    {
-      title: 'Test 3',
-      no_of: 10,
-    },
-    {
-      title: 'Test 4',
-      no_of: 10,
-    },
-    {
-      title: 'Test 5',
-      no_of: 10,
-    },
-  ]);
+  const {category_name, id} = route_data;
+  const [list, setList] = useState([]);
+  const [loader, setLoader] = useState(false);
   const {goBack, navigate} = useNavigation();
+
+  const getList = useCallback(async () => {
+    try {
+      setLoader(true);
+      const response = await get_mcq_test(id);
+      setList(response?.data);
+    } catch (err) {
+      error(err);
+    } finally {
+      setLoader(false);
+    }
+  }, [id]);
+
+  useEffect(() => {
+    getList();
+  }, [id]);
 
   const renderItemHandler = useCallback(
     ({item}) => {
-      const {no_of, title} = item;
+      const {questions} = item;
 
       const onNavigateScreen = () => {
         navigate(screens.MSQQuestion, {
@@ -51,8 +47,8 @@ const MCQListing = ({route}) => {
         <SelectItem
           data={item}
           onPress={onNavigateScreen}
-          title={title}
-          subTitle={no_of ? `${no_of} Questions` : null}
+          title={item?.category_name}
+          subTitle={questions ? `${questions} Questions` : null}
         />
       );
     },

@@ -297,6 +297,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: colors.colorDCF9FF,
     borderColor: colors.transparent_black_10,
+    paddingHorizontal: 20,
   },
   questionTitle: {
     fontSize: 18,

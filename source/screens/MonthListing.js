@@ -7,7 +7,13 @@ import CommonHead from '../components/styles/CommonHead';
 import {colors} from '../constants/colors';
 import {screens} from '../constants/screens';
 import {useNavigation} from '@react-navigation/native';
-import {get_mcq, get_pdf} from '../utils/api';
+import {
+  get_mcq,
+  get_paragraph_translation,
+  get_pdf,
+  get_sentence_structure,
+  get_translation_one_liner,
+} from '../utils/api';
 import {error} from '../tost/error';
 
 const MonthListing = ({route}) => {
@@ -21,15 +27,36 @@ const MonthListing = ({route}) => {
   const getList = useCallback(async () => {
     try {
       setLoader(true);
-      if (screens_form === screens.PDFView) {
+      if (screens_form === screens.PDFView && type === '5') {
         const response = await get_pdf();
         setList(
           response?.data?.map(ele => {
             return {...ele, title: ele?.category_name};
           }),
         );
-      } else {
+      } else if (screens_form === screens.MCQListing && type === '5') {
         const response = await get_mcq();
+        setList(
+          response?.data?.map(ele => {
+            return {...ele, title: ele?.category_name};
+          }),
+        );
+      } else if (type === '6') {
+        const response = await get_translation_one_liner();
+        setList(
+          response?.data?.map(ele => {
+            return {...ele, title: ele?.category_name};
+          }),
+        );
+      } else if (type === '7') {
+        const response = await get_paragraph_translation();
+        setList(
+          response?.data?.map(ele => {
+            return {...ele, title: ele?.category_name};
+          }),
+        );
+      } else if (type === '8') {
+        const response = await get_sentence_structure();
         setList(
           response?.data?.map(ele => {
             return {...ele, title: ele?.category_name};
@@ -41,11 +68,11 @@ const MonthListing = ({route}) => {
     } finally {
       setLoader(false);
     }
-  }, []);
+  }, [type]);
 
   useEffect(() => {
     getList();
-  }, [screens_form]);
+  }, [screens_form, type]);
 
   const {goBack, navigate} = useNavigation();
 

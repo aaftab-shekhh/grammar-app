@@ -1,6 +1,6 @@
 import {useNavigation} from '@react-navigation/native';
 import React, {memo, useCallback, useEffect, useRef, useState} from 'react';
-import {Pressable, ScrollView, StyleSheet, View} from 'react-native';
+import {Animated, Pressable, ScrollView, StyleSheet, View} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import {images} from '../assets';
 import Font400 from '../components/font/Font400';
@@ -15,8 +15,9 @@ import ProgressBar from '../components/styles/ProgressBar';
 import {colors} from '../constants/colors';
 import {screens} from '../constants/screens';
 import {get_mock_question} from '../utils/api';
+import Font500 from '../components/font/Font500';
 
-const LearnWithQuiz = ({route}) => {
+const MockTest = ({route}) => {
   const {id, category_name, type} = route?.params?.data;
 
   const {goBack, navigate} = useNavigation();
@@ -29,6 +30,12 @@ const LearnWithQuiz = ({route}) => {
   const [rightAnswerCount, setRightAnswerCount] = useState(0);
   const [wrongAnswerCount, setWrongAnswerCount] = useState(0);
   const [skipAnswerCount, setSkipAnswerCount] = useState(0);
+
+  const [clickedCorrect, setClickedCorrect] = useState(false);
+  const [clickedIncorrect, setClickedIncorrect] = useState(false);
+
+  const animationCorrect = useRef(new Animated.Value(300)).current;
+  const animationIncorrect = useRef(new Animated.Value(300)).current;
 
   const questionModel = useRef();
   const scoreModel = useRef();
@@ -72,6 +79,7 @@ const LearnWithQuiz = ({route}) => {
 
         return {
           ...item,
+          user_answer: null,
           optiona: options[0],
           optionb: options[1],
           optionc: options[2],
@@ -151,6 +159,14 @@ const LearnWithQuiz = ({route}) => {
         setWrongAnswerCount(prev => prev + 1);
       }
       setSelectedAnswer(answer);
+      setData(prev =>
+        prev?.map((ele, index) => {
+          if (index === currentIndex) {
+            return {...ele, user_answer: answer};
+          }
+          return ele;
+        }),
+      );
     },
     [currentIndex, data, selectedAnswer],
   );
@@ -177,6 +193,38 @@ const LearnWithQuiz = ({route}) => {
   const onEndTestModelOpen = useCallback(() => {
     andTestModel?.current?.open();
   }, []);
+
+  const handlePressForCorrect = useCallback(() => {
+    Animated.timing(animationCorrect, {
+      toValue: -120,
+      duration: 300,
+      useNativeDriver: true,
+    }).start(() => {
+      setTimeout(() => {
+        Animated.timing(animationCorrect, {
+          toValue: 300,
+          duration: 400,
+          useNativeDriver: true,
+        }).start();
+      }, 1000);
+    });
+  }, []);
+
+  const handlePressForIncorrect = () => {
+    Animated.timing(animationIncorrect, {
+      toValue: -120,
+      duration: 300,
+      useNativeDriver: true,
+    }).start(() => {
+      setTimeout(() => {
+        Animated.timing(animationIncorrect, {
+          toValue: 300,
+          duration: 400,
+          useNativeDriver: true,
+        }).start();
+      }, 1000);
+    });
+  };
 
   return (
     <View style={styles.root}>
@@ -208,13 +256,13 @@ const LearnWithQuiz = ({route}) => {
         extraHeight={33}>
         <Font600 style={styles.heading}>{formatTime(remainingTime)}</Font600>
         <View style={styles.headingContainer}>
-          <Pressable style={styles.headingButton}>
+          {/* <Pressable style={styles.headingButton}>
             <FastImage
               style={styles.gridIcon}
               source={images.drawer}
               resizeMode="contain"
             />
-          </Pressable>
+          </Pressable> */}
           <Pressable onPress={onEndTestModelOpen} style={styles.headingButton}>
             <Font600 style={styles.endTest}>{'End test'}</Font600>
           </Pressable>
@@ -235,6 +283,28 @@ const LearnWithQuiz = ({route}) => {
               completedQuestion={currentIndex + 1}
             />
           ) : null}
+        </View>
+        <View style={styles.markContainer}>
+          <Animated.View
+            style={[
+              styles.markDetailContainer,
+              {transform: [{translateX: animationCorrect}]},
+            ]}>
+            <Font500 style={styles.markDetail}>{'+2 For correct'}</Font500>
+          </Animated.View>
+          <Animated.View
+            style={[
+              styles.markDetailContainer,
+              {transform: [{translateX: animationIncorrect}]},
+            ]}>
+            <Font500 style={styles.markDetail}>{'-0.5 For incorrect'}</Font500>
+          </Animated.View>
+          <Pressable onPress={handlePressForCorrect} style={styles.mark}>
+            <Font400 style={styles.markText}>{'+2'}</Font400>
+          </Pressable>
+          <Pressable onPress={handlePressForIncorrect} style={styles.mark}>
+            <Font400 style={styles.markText}>{'-5'}</Font400>
+          </Pressable>
         </View>
         <View style={styles.questionContainer}>
           {data[currentIndex]?.question ? (
@@ -326,7 +396,7 @@ const LearnWithQuiz = ({route}) => {
   );
 };
 
-export default memo(LearnWithQuiz);
+export default memo(MockTest);
 
 const styles = StyleSheet.create({
   root: {
@@ -363,9 +433,39 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginHorizontal: 8,
   },
+  markContainer: {
+    paddingTop: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+  },
+  markDetail: {
+    fontSize: 12,
+    color: colors.white,
+  },
+  markDetailContainer: {
+    zIndex: 1,
+    borderRadius: 4,
+    paddingVertical: 2,
+    position: 'absolute',
+    paddingHorizontal: 10,
+    backgroundColor: colors.color125A92,
+    bottom: 4,
+  },
+  mark: {
+    borderWidth: 1,
+    borderRadius: 4,
+    marginHorizontal: 10,
+    paddingVertical: 3,
+    paddingHorizontal: 10,
+    borderColor: colors.transparent_black_40,
+  },
+  markText: {
+    color: colors.transparent_black_40,
+  },
   questionContainer: {
     height: 173,
-    marginTop: 32,
+    marginTop: 12,
     borderWidth: 1,
     borderRadius: 12,
     marginHorizontal: 8,
@@ -373,6 +473,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: colors.colorF0FFFF,
     borderColor: colors.transparent_black_10,
+    paddingHorizontal: 20,
   },
   questionTitle: {
     fontSize: 18,

@@ -12,11 +12,12 @@ import Button from '../components/styles/Button';
 import CommonHead from '../components/styles/CommonHead';
 import ProgressBar from '../components/styles/ProgressBar';
 import {colors} from '../constants/colors';
-import {get_data} from '../utils/api';
+import {get_data, get_mcq_test_question} from '../utils/api';
 import {useSelector} from 'react-redux';
+import {error} from '../tost/error';
 
 const MSQQuestion = ({route}) => {
-  const {title, id, category_name, type} = route?.params?.data;
+  const {title, category, category_name, type} = route?.params?.data;
 
   const {goBack} = useNavigation();
 
@@ -190,22 +191,12 @@ const MSQQuestion = ({route}) => {
   const getData = useCallback(async () => {
     let data = {
       access_key: 6808,
-      learning_id: id,
-      get_questions_by_learning: 1,
-      language_id: user?.user?.language,
+      category: category,
     };
-
-    if (type === '1') {
-      data = {
-        access_key: 6808,
-        get_questions_by_subcategory: 1,
-        subcategory: id,
-      };
-    }
 
     try {
       setLoader(true);
-      const response = await get_data(data);
+      const response = await get_mcq_test_question(data);
 
       const newData = response?.data?.map(item => {
         const options = [
@@ -217,36 +208,37 @@ const MSQQuestion = ({route}) => {
 
         const answer = item?.optiona;
 
-        options.sort(() => Math.random() - 0.5); // Shuffle options randomly
+        options.sort(() => Math.random() - 0.5);
 
         const correctOptionIndex = options.indexOf(answer);
 
         return {
-          ...item, // Spread existing properties
+          ...item,
           optiona: options[0],
           optionb: options[1],
           optionc: options[2],
           optiond: options[3],
-          answer: options[correctOptionIndex], // Update answer to character
+          answer: options[correctOptionIndex],
         };
       });
 
       setData(newData);
-    } catch (error) {
+    } catch (err) {
+      error(err);
     } finally {
       setLoader(false);
     }
-  }, [id, type]);
+  }, [category]);
 
   useEffect(() => {
-    if (id) getData();
-  }, [id]);
+    getData();
+  }, [category]);
 
   const options = {
-    a: data[currentIndex]?.optiona,
-    b: data[currentIndex]?.optionb,
-    c: data[currentIndex]?.optionc,
-    d: data[currentIndex]?.optiond,
+    a: data?.[currentIndex]?.optiona,
+    b: data?.[currentIndex]?.optionb,
+    c: data?.[currentIndex]?.optionc,
+    d: data?.[currentIndex]?.optiond,
   };
 
   const option_array = [options?.a, options?.b, options?.c, options?.d];
@@ -316,15 +308,15 @@ const MSQQuestion = ({route}) => {
               progress={progress}
               barColor={colors.color228ED5}
               backgroundColor={colors.colorC0DFF7}
-              totalQuestion={data.length}
+              totalQuestion={data?.length}
               completedQuestion={currentIndex + 1}
             />
           ) : null}
         </View>
         <View style={styles.questionContainer}>
-          {data[currentIndex]?.question ? (
+          {data?.[currentIndex]?.question ? (
             <Font600 style={styles.questionTitle}>
-              {data[currentIndex]?.question}
+              {data?.[currentIndex]?.question}
             </Font600>
           ) : null}
         </View>
@@ -338,7 +330,7 @@ const MSQQuestion = ({route}) => {
                 style={[
                   styles.answer,
                   selectedAnswer
-                    ? data[currentIndex].answer === ele
+                    ? data?.[currentIndex].answer === ele
                       ? styles.rightAnswer
                       : selectedAnswer === ele
                       ? styles.wrongAnswer
@@ -354,7 +346,7 @@ const MSQQuestion = ({route}) => {
                 {selectedAnswer ? (
                   <FastImage
                     source={
-                      data[currentIndex].answer === ele
+                      data?.[currentIndex].answer === ele
                         ? images.correct_answer
                         : selectedAnswer === ele
                         ? images.wrong_answer
@@ -369,9 +361,9 @@ const MSQQuestion = ({route}) => {
           })}
         </View>
         <View style={styles.noteContainer}>
-          {data[currentIndex]?.note && selectedAnswer ? (
+          {data?.[currentIndex]?.note && selectedAnswer ? (
             <Font400 style={styles.note}>
-              <Font700>{'Note :'}</Font700> {data[currentIndex]?.note}
+              <Font700>{'Note :'}</Font700> {data?.[currentIndex]?.note}
             </Font400>
           ) : null}
         </View>
@@ -441,6 +433,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: colors.colorF0FFFF,
     borderColor: colors.transparent_black_10,
+    paddingHorizontal: 20,
   },
   questionTitle: {
     fontSize: 18,

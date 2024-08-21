@@ -31,6 +31,12 @@ const LearnWithQuiz = ({route}) => {
   const [wrongAnswerCount, setWrongAnswerCount] = useState(0);
   const [skipAnswerCount, setSkipAnswerCount] = useState(0);
 
+  useEffect(() => {
+    if (currentIndex) {
+      console.log('data', data?.[currentIndex]);
+    }
+  }, [currentIndex]);
+
   const questionModel = useRef();
   const scoreModel = useRef();
 
@@ -76,6 +82,8 @@ const LearnWithQuiz = ({route}) => {
       setLoader(true);
       const response = await get_data(data);
 
+      console.log('response?.data[0]', response?.data[1])
+
       const newData = response?.data?.map(item => {
         const options = [
           item?.optiona,
@@ -86,7 +94,7 @@ const LearnWithQuiz = ({route}) => {
 
         const answer = item?.optiona;
 
-        options.sort(() => Math.random() - 0.5); // Shuffle options randomly
+        options.sort(() => Math.random() - 0.5);
 
         const correctOptionIndex = options.indexOf(answer);
 
@@ -96,7 +104,7 @@ const LearnWithQuiz = ({route}) => {
           optionb: options[1],
           optionc: options[2],
           optiond: options[3],
-          answer: options[correctOptionIndex], // Update answer to character
+          answer: options[correctOptionIndex],
         };
       });
 
@@ -310,6 +318,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: colors.colorF0FFFF,
     borderColor: colors.transparent_black_10,
+    paddingHorizontal: 20,
   },
   questionTitle: {
     fontSize: 18,

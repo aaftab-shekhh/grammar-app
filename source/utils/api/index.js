@@ -73,6 +73,30 @@ export const get_mcq = async () => {
   }
 };
 
+export const get_mcq_test = async category => {
+  try {
+    const main_response = await fetch(
+      `https://cl.englivia.com/api/subcategory.php?type=2&category=${category}`,
+    );
+    const response = await main_response.json();
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const get_mcq_test_question = async category => {
+  try {
+    const main_response = await fetch(
+      `https://cl.englivia.com/api/question.php?type=2&category=${category}`,
+    );
+    const response = await main_response.json();
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const get_pdf = async () => {
   try {
     const main_response = await fetch(
@@ -89,6 +113,42 @@ export const get_mock_question = async id => {
   try {
     const main_response = await fetch(
       `https://cl.englivia.com/api/question.php?category=${id}`,
+    );
+    const response = await main_response.json();
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const get_sentence_structure = async () => {
+  try {
+    const main_response = await fetch(
+      `https://cl.englivia.com/api/pdf.php?type=3`,
+    );
+    const response = await main_response.json();
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const get_paragraph_translation = async () => {
+  try {
+    const main_response = await fetch(
+      `https://cl.englivia.com/api/translation/paragraph.php`,
+    );
+    const response = await main_response.json();
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const get_translation_one_liner = async () => {
+  try {
+    const main_response = await fetch(
+      `https://cl.englivia.com/api/translation/one-liner.php`,
     );
     const response = await main_response.json();
     return response;
