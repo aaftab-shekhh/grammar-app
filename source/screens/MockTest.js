@@ -284,94 +284,94 @@ const MockTest = ({route}) => {
       {/* showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.container}
         bounces={false} */}
-      <View style={styles.container}>
-        <View style={styles.progressContainer}>
-          {progress ? (
-            <ProgressBar
-              height={40}
-              progress={progress}
-              barColor={colors.color228ED5}
-              backgroundColor={colors.colorC0DFF7}
-              totalQuestion={data.length}
-              completedQuestion={currentIndex + 1}
-            />
-          ) : null}
-        </View>
-        <View style={styles.markContainer}>
-          <Animated.View
-            style={[
-              styles.markDetailContainer,
-              {transform: [{translateX: animationCorrect}]},
-            ]}>
-            <Font500 style={styles.markDetail}>{'+2 For correct'}</Font500>
-          </Animated.View>
-          <Animated.View
-            style={[
-              styles.markDetailContainer,
-              {transform: [{translateX: animationIncorrect}]},
-            ]}>
-            <Font500 style={styles.markDetail}>{'-0.5 For incorrect'}</Font500>
-          </Animated.View>
-          <Pressable onPress={handlePressForCorrect} style={styles.mark}>
-            <Font400 style={styles.markText}>{'+2'}</Font400>
-          </Pressable>
-          <Pressable onPress={handlePressForIncorrect} style={styles.mark}>
-            <Font400 style={styles.markText}>{'-0.5'}</Font400>
-          </Pressable>
-        </View>
-        <View style={styles.questionContainer}>
-          {data[currentIndex]?.question ? (
-            <ScrollView
-              contentContainerStyle={{flexGrow: 1, justifyContent: 'center'}}
-              bounces={false}>
+      <ScrollView contentContainerStyle={{flexGrow: 1}}>
+        <View style={styles.container}>
+          <View style={styles.progressContainer}>
+            {progress ? (
+              <ProgressBar
+                height={40}
+                progress={progress}
+                barColor={colors.color228ED5}
+                backgroundColor={colors.colorC0DFF7}
+                totalQuestion={data.length}
+                completedQuestion={currentIndex + 1}
+              />
+            ) : null}
+          </View>
+          <View style={styles.markContainer}>
+            <Animated.View
+              style={[
+                styles.markDetailContainer,
+                {transform: [{translateX: animationCorrect}]},
+              ]}>
+              <Font500 style={styles.markDetail}>{'+2 For correct'}</Font500>
+            </Animated.View>
+            <Animated.View
+              style={[
+                styles.markDetailContainer,
+                {transform: [{translateX: animationIncorrect}]},
+              ]}>
+              <Font500 style={styles.markDetail}>
+                {'-0.5 For incorrect'}
+              </Font500>
+            </Animated.View>
+            <Pressable onPress={handlePressForCorrect} style={styles.mark}>
+              <Font400 style={styles.markText}>{'+2'}</Font400>
+            </Pressable>
+            <Pressable onPress={handlePressForIncorrect} style={styles.mark}>
+              <Font400 style={styles.markText}>{'-0.5'}</Font400>
+            </Pressable>
+          </View>
+          <View style={styles.questionContainer}>
+            {data[currentIndex]?.question ? (
               <Font600 style={styles.questionTitle}>
                 {data[currentIndex]?.question}
               </Font600>
-            </ScrollView>
-          ) : null}
+            ) : null}
+          </View>
+          <View style={styles.answerContainer}>
+            {option_array?.map((ele, index) => {
+              if (!ele) return null;
+              return (
+                <Pressable
+                  key={index}
+                  onPress={setSelectedAnswerHandler.bind(null, ele)}
+                  style={[
+                    styles.answer,
+                    selectedAnswer
+                      ? selectedAnswer === ele
+                        ? styles.rightAnswer
+                        : null
+                      : null,
+                  ]}>
+                  <View style={styles.answerTextContainer}>
+                    <Font600 style={styles.answerText}>
+                      {/* {String.fromCharCode(65 + index) + '. ' + ele} */}
+                      {ele}
+                    </Font600>
+                  </View>
+                  {selectedAnswer ? (
+                    <FastImage
+                      source={
+                        selectedAnswer === ele ? images.correct_answer : null
+                      }
+                      style={styles.icon}
+                      resizeMode="contain"
+                    />
+                  ) : null}
+                </Pressable>
+              );
+            })}
+          </View>
+          <View style={styles.noteContainer}>
+            {data[currentIndex]?.note && selectedAnswer ? (
+              <Font400 style={styles.note}>
+                <Font700>{'Note :'}</Font700> {data[currentIndex]?.note}
+              </Font400>
+            ) : null}
+          </View>
         </View>
-        <View style={styles.answerContainer}>
-          {option_array?.map((ele, index) => {
-            if (!ele) return null;
-            return (
-              <Pressable
-                key={index}
-                onPress={setSelectedAnswerHandler.bind(null, ele)}
-                style={[
-                  styles.answer,
-                  selectedAnswer
-                    ? selectedAnswer === ele
-                      ? styles.rightAnswer
-                      : null
-                    : null,
-                ]}>
-                <View style={styles.answerTextContainer}>
-                  <Font600 style={styles.answerText}>
-                    {/* {String.fromCharCode(65 + index) + '. ' + ele} */}
-                    {ele}
-                  </Font600>
-                </View>
-                {selectedAnswer ? (
-                  <FastImage
-                    source={
-                      selectedAnswer === ele ? images.correct_answer : null
-                    }
-                    style={styles.icon}
-                    resizeMode="contain"
-                  />
-                ) : null}
-              </Pressable>
-            );
-          })}
-        </View>
-        <View style={styles.noteContainer}>
-          {data[currentIndex]?.note && selectedAnswer ? (
-            <Font400 style={styles.note}>
-              <Font700>{'Note :'}</Font700> {data[currentIndex]?.note}
-            </Font400>
-          ) : null}
-        </View>
-      </View>
+      </ScrollView>
       <View style={styles.buttonContainer}>
         <View />
 
@@ -386,6 +386,7 @@ const MockTest = ({route}) => {
           </Button>
         ) : null}
       </View>
+
       {rightAnswerCount + wrongAnswerCount + skipAnswerCount >= data?.length &&
       data?.length !== 0 ? (
         <Button onPress={onSubmit} buttonStyle={styles.submit}>
@@ -475,7 +476,7 @@ const styles = StyleSheet.create({
     color: colors.transparent_black_40,
   },
   questionContainer: {
-    height: 173,
+    // height: 173,
     marginTop: 12,
     borderWidth: 1,
     borderRadius: 12,
