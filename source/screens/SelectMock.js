@@ -9,6 +9,7 @@ import CommonHead from '../components/styles/CommonHead';
 import {colors} from '../constants/colors';
 import {get_mock} from '../utils/api';
 import {screens} from '../constants/screens';
+import BannerADs from '../components/styles/BannerADs';
 
 const SelectMock = ({route}) => {
   const route_data = route?.params;
@@ -79,11 +80,9 @@ const SelectMock = ({route}) => {
         style={{
           height: 52,
           justifyContent: 'center',
-          backgroundColor: colors.colorFF0E0E,
+          backgroundColor: colors.white,
         }}>
-        <Font700 style={{color: colors.white, textAlign: 'center'}}>
-          {'ADD'}
-        </Font700>
+        <BannerADs />
       </View>
     </View>
   );

@@ -1,14 +1,14 @@
+import {useNavigation} from '@react-navigation/native';
 import React, {memo, useCallback, useEffect, useRef} from 'react';
 import {ScrollView, StyleSheet, View} from 'react-native';
+import {useSelector} from 'react-redux';
+import {images} from '../assets';
 import CourseListing from '../components/list/CourseListing';
 import ImageSlider from '../components/list/ImageSlider';
-import CommonHead from '../components/styles/CommonHead';
-import {images} from '../assets';
-import {useNavigation} from '@react-navigation/native';
-import {screens} from '../constants/screens';
 import LanguageChoiceModel from '../components/model/LanguageChoiceModel';
 import LogoModel from '../components/model/LogoModel';
-import {useSelector} from 'react-redux';
+import CommonHead from '../components/styles/CommonHead';
+import {screens} from '../constants/screens';
 
 const Home = () => {
   const {navigate} = useNavigation();

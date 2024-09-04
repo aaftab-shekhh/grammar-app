@@ -43,6 +43,7 @@ const Root = () => {
     try {
       setLoader(true);
       const response = await get_token();
+      console.log('response', response)
       dispatch(update_user({access_token: response}));
     } catch (e) {
       error(e);
@@ -69,7 +70,11 @@ const Root = () => {
         <Stack.Screen name={screens.SelectLevel} component={SelectLevel} />
         <Stack.Screen name={screens.SelectSet} component={SelectSet} />
         <Stack.Screen name={screens.SelectMock} component={SelectMock} />
-        <Stack.Screen name={screens.MockTest} component={MockTest} />
+        <Stack.Screen
+          name={screens.MockTest}
+          component={MockTest}
+          options={{gestureEnabled: false}}
+        />
         <Stack.Screen
           name={screens.LearnWithImages}
           component={LearnWithImages}
@@ -84,7 +89,9 @@ const Root = () => {
         <Stack.Screen name={screens.MSQQuestion} component={MSQQuestion} />
         <Stack.Screen
           options={{
-            animation: 'slide_from_bottom',
+            gestureEnabled: false,
+            swipeEnabled: false,
+            // animation: 'slide_from_bottom',
           }}
           name={screens.Score}
           component={Score}

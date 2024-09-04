@@ -1,21 +1,35 @@
-import {useNavigation} from '@react-navigation/native';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
 import React, {memo, useCallback, useEffect, useRef, useState} from 'react';
 import {Animated, Pressable, ScrollView, StyleSheet, View} from 'react-native';
 import FastImage from 'react-native-fast-image';
+import {
+  RewardedAd,
+  RewardedAdEventType,
+  TestIds,
+} from 'react-native-google-mobile-ads';
 import {images} from '../assets';
 import Font400 from '../components/font/Font400';
+import Font500 from '../components/font/Font500';
 import Font600 from '../components/font/Font600';
 import Font700 from '../components/font/Font700';
 import QuestionSubmitModel from '../components/model/QuestionSubmitModel';
-import ScoreModel from '../components/model/ScoreModel';
 import TostModel from '../components/model/TostModel';
+import BannerADs from '../components/styles/BannerADs';
 import Button from '../components/styles/Button';
 import CommonHead from '../components/styles/CommonHead';
 import ProgressBar from '../components/styles/ProgressBar';
 import {colors} from '../constants/colors';
 import {screens} from '../constants/screens';
 import {get_mock_question} from '../utils/api';
-import Font500 from '../components/font/Font500';
+
+const adUnitId = __DEV__
+  ? TestIds.REWARDED
+  : 'ca-app-pub-6464114688925756~4549370474';
+
+const rewarded = RewardedAd.createForAdRequest(adUnitId, {
+  requestNonPersonalizedAdsOnly: true,
+  keywords: ['fashion', 'clothing'],
+});
 
 const MockTest = ({route}) => {
   const {id, category_name, type} = route?.params?.data;
@@ -30,6 +44,10 @@ const MockTest = ({route}) => {
   const [rightAnswerCount, setRightAnswerCount] = useState(0);
   const [wrongAnswerCount, setWrongAnswerCount] = useState(0);
   const [skipAnswerCount, setSkipAnswerCount] = useState(0);
+  const [loaded, setLoaded] = useState(false);
+  const [questionCompleted, setQuestionCompleted] = useState(false);
+
+  const focus = useIsFocused();
 
   const [clickedCorrect, setClickedCorrect] = useState(false);
   const [clickedIncorrect, setClickedIncorrect] = useState(false);
@@ -38,7 +56,6 @@ const MockTest = ({route}) => {
   const animationIncorrect = useRef(new Animated.Value(300)).current;
 
   const questionModel = useRef();
-  const scoreModel = useRef();
   const intervalRef = useRef();
   const andTestModel = useRef();
 
@@ -47,9 +64,53 @@ const MockTest = ({route}) => {
       rightAnswerCount + wrongAnswerCount + skipAnswerCount === data?.length &&
       data?.length !== 0
     ) {
-      questionModel?.current?.open();
+      if (!questionCompleted) {
+        questionModel?.current?.open();
+      }
+      setQuestionCompleted(true);
     }
-  }, [rightAnswerCount, wrongAnswerCount, skipAnswerCount, data]);
+  }, [
+    rightAnswerCount,
+    wrongAnswerCount,
+    skipAnswerCount,
+    data,
+    questionCompleted,
+  ]);
+
+  useEffect(() => {
+    if (!focus) {
+      setLoaded(false);
+    }
+  }, [focus]);
+
+  useEffect(() => {
+    try {
+      if (focus && !loaded) {
+        const unsubscribeLoaded = rewarded.addAdEventListener(
+          RewardedAdEventType.LOADED,
+          () => {
+            setLoaded(true);
+            console.log('loaded', true);
+          },
+        );
+        const unsubscribeEarned = rewarded.addAdEventListener(
+          RewardedAdEventType.EARNED_REWARD,
+          reward => {
+            console.log('User earned reward of ', reward);
+          },
+        );
+
+        rewarded.load();
+
+        return () => {
+          unsubscribeLoaded();
+          unsubscribeEarned();
+        };
+      }
+    } catch (err) {
+      console.log('err', err);
+    }
+  }, [loaded, focus]);
 
   const onSubmit = useCallback(() => {
     if (
@@ -57,12 +118,36 @@ const MockTest = ({route}) => {
         data?.length - 1 &&
       data?.length !== 0
     ) {
-      questionModel?.current?.open();
+      if (!questionCompleted) {
+        questionModel?.current?.open();
+      }
+      setQuestionCompleted(true);
     } else {
       questionModel?.current?.close();
-      scoreModel?.current?.open();
+      // scoreModel?.current?.open();
+
+      try {
+        rewarded.show();
+      } catch (err) {
+        console.log('err', err);
+      }
+
+      andTestModel?.current?.close();
+      navigate(screens.Score, {
+        right: rightAnswerCount,
+        wrong: wrongAnswerCount,
+        total: data?.length,
+        title: 'Result : ' + category_name,
+        list: data,
+      });
     }
-  }, [rightAnswerCount, wrongAnswerCount, skipAnswerCount, data]);
+  }, [
+    rightAnswerCount,
+    wrongAnswerCount,
+    skipAnswerCount,
+    data,
+    questionCompleted,
+  ]);
 
   const getData = useCallback(async () => {
     try {
@@ -70,17 +155,17 @@ const MockTest = ({route}) => {
       const response = await get_mock_question(id);
 
       const newData = response?.response?.map(item => {
-        console.log(
-          'first',
-          item?.answer,
-          item?.answer?.toString()?.toLowerCase() === 'a'
-            ? item?.optiona
-            : item?.answer?.toString()?.toLowerCase() === 'b'
-            ? item?.optionb
-            : item?.answer?.toString()?.toLowerCase() === 'c'
-            ? item?.optionc
-            : item?.optiond,
-        );
+        // console.log(
+        //   'first',
+        //   item?.answer,
+        //   item?.answer?.toString()?.toLowerCase() === 'a'
+        //     ? item?.optiona
+        //     : item?.answer?.toString()?.toLowerCase() === 'b'
+        //     ? item?.optionb
+        //     : item?.answer?.toString()?.toLowerCase() === 'c'
+        //     ? item?.optionc
+        //     : item?.optiond,
+        // );
         const options = [
           item?.optiona,
           item?.optionb,
@@ -138,12 +223,12 @@ const MockTest = ({route}) => {
   }, [data, selectedAnswer]);
 
   useEffect(() => {
-    if (data?.length === 0) return;
+    if (data?.length === 0 || questionCompleted) return;
     setRemainingTime(parseInt(data?.[currentIndex]?.duration));
-  }, [data, currentIndex]);
+  }, [data, currentIndex, questionCompleted]);
 
   useEffect(() => {
-    if (data?.length === 0) return;
+    if (data?.length === 0 || questionCompleted) return;
     intervalRef.current = setInterval(() => {
       setRemainingTime(prevTime => {
         if (prevTime <= 1000) {
@@ -156,7 +241,7 @@ const MockTest = ({route}) => {
     }, 1000);
 
     return () => clearInterval(intervalRef.current);
-  }, [currentIndex, data]);
+  }, [currentIndex, data, questionCompleted]);
 
   useEffect(() => {
     if (data?.length !== 0)
@@ -187,6 +272,12 @@ const MockTest = ({route}) => {
   const onSubmitHandler = useCallback(() => {
     // questionModel?.current?.close();
     // scoreModel?.current?.open();
+
+    try {
+      rewarded.show();
+    } catch (err) {
+      console.log('err', err);
+    }
 
     andTestModel?.current?.close();
     navigate(screens.Score, {
@@ -247,13 +338,13 @@ const MockTest = ({route}) => {
         total={data?.length}
         onSubmit={onSubmitHandler}
       />
-      <ScoreModel
+      {/* <ScoreModel
         ref={scoreModel}
         right={rightAnswerCount}
         wrong={wrongAnswerCount}
         total={data?.length}
         title={'Result : ' + category_name}
-      />
+      /> */}
       <TostModel
         ref={andTestModel}
         onPress={onSubmitHandler}
@@ -346,11 +437,10 @@ const MockTest = ({route}) => {
                   ]}>
                   <View style={styles.answerTextContainer}>
                     <Font600 style={styles.answerText}>
-                      {/* {String.fromCharCode(65 + index) + '. ' + ele} */}
-                      {ele}
+                      {String.fromCharCode(65 + index) + '. ' + ele}
                     </Font600>
                   </View>
-                  {selectedAnswer ? (
+                  {/* {selectedAnswer ? (
                     <FastImage
                       source={
                         selectedAnswer === ele ? images.correct_answer : null
@@ -358,7 +448,7 @@ const MockTest = ({route}) => {
                       style={styles.icon}
                       resizeMode="contain"
                     />
-                  ) : null}
+                  ) : null} */}
                 </Pressable>
               );
             })}
@@ -398,11 +488,9 @@ const MockTest = ({route}) => {
         style={{
           height: 52,
           justifyContent: 'center',
-          backgroundColor: colors.colorFF0E0E,
+          backgroundColor: colors.white,
         }}>
-        <Font700 style={{color: colors.white, textAlign: 'center'}}>
-          {'ADD'}
-        </Font700>
+        <BannerADs />
       </View>
     </View>
   );

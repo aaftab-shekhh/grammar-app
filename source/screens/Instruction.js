@@ -67,7 +67,7 @@ const Instruction = ({route}) => {
           </View>
           <View style={styles.line} />
           <View style={styles.testDetails}>
-            <Font700 style={styles.testValue}>{questions}</Font700>
+            <Font700 style={styles.testValue}>{+questions * 2}</Font700>
             <Font500 style={styles.testLabel}>{'Marks'}</Font500>
           </View>
         </View>

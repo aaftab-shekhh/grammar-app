@@ -7,6 +7,7 @@ import {colors} from '../constants/colors';
 import Font700 from '../components/font/Font700';
 import {get_data} from '../utils/api';
 import NewsPaperItem from '../components/items/NewsPaperItem';
+import BannerADs from '../components/styles/BannerADs';
 
 const NewsPaper = ({route}) => {
   const route_data = route?.params?.data;
@@ -63,11 +64,9 @@ const NewsPaper = ({route}) => {
         style={{
           height: 52,
           justifyContent: 'center',
-          backgroundColor: colors.colorFF0E0E,
+          backgroundColor: colors.white,
         }}>
-        <Font700 style={{color: colors.white, textAlign: 'center'}}>
-          {'ADD'}
-        </Font700>
+        <BannerADs />
       </View>
     </View>
   );

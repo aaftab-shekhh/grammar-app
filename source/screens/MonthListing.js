@@ -15,6 +15,7 @@ import {
   get_translation_one_liner,
 } from '../utils/api';
 import {error} from '../tost/error';
+import BannerADs from '../components/styles/BannerADs';
 
 const MonthListing = ({route}) => {
   const [list, setList] = useState([]);
@@ -29,6 +30,7 @@ const MonthListing = ({route}) => {
       setLoader(true);
       if (screens_form === screens.PDFView && type === '5') {
         const response = await get_pdf();
+
         setList(
           response?.data?.map(ele => {
             return {...ele, title: ele?.category_name};
@@ -118,11 +120,9 @@ const MonthListing = ({route}) => {
         style={{
           height: 52,
           justifyContent: 'center',
-          backgroundColor: colors.colorFF0E0E,
+          backgroundColor: colors.white,
         }}>
-        <Font700 style={{color: colors.white, textAlign: 'center'}}>
-          {'ADD'}
-        </Font700>
+        <BannerADs />
       </View>
     </View>
   );

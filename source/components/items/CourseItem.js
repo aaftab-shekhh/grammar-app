@@ -2,11 +2,11 @@ import {useNavigation} from '@react-navigation/native';
 import React, {memo, useCallback} from 'react';
 import {Pressable, StyleSheet} from 'react-native';
 import FastImage from 'react-native-fast-image';
+import {images} from '../../assets';
 import {colors} from '../../constants/colors';
 import {deviceWidth} from '../../constants/constants';
 import {screens} from '../../constants/screens';
 import Font700 from '../font/Font700';
-import {images} from '../../assets';
 
 const CourseItem = ({data}) => {
   const {category_name, type} = data;

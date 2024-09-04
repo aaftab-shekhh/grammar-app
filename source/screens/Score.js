@@ -1,6 +1,6 @@
-import {useNavigation} from '@react-navigation/native';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import React, {memo, useCallback, useEffect, useRef, useState} from 'react';
-import {Animated, Pressable, StyleSheet, View} from 'react-native';
+import {Animated, BackHandler, Pressable, StyleSheet, View} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import {images} from '../assets';
 import Font400 from '../components/font/Font400';
@@ -98,6 +98,23 @@ const Score = ({route}) => {
     return <QuestionItem data={{...item, index: index}} />;
   }, []);
 
+  useFocusEffect(
+    useCallback(() => {
+      const onBackPress = () => {
+        console.log('"first"', 'first');
+        navigate.bind(null, screens.SelectMock, {
+          category_name: 'SSC PYQ Test',
+          type: '4',
+        });
+      };
+      BackHandler.addEventListener('hardwareBackPress', onBackPress);
+      return () =>
+        BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+    }, []),
+  );
+
+  const marks = right * 2 - wrong * 0.5;
+
   return (
     <View style={styles.root}>
       <CommonHead
@@ -135,8 +152,8 @@ const Score = ({route}) => {
           </View>
           <View style={styles.scoreContainer}>
             <View style={styles.scoreDetail}>
-              <Font600 style={styles.right}>{right + '/'}</Font600>
-              <Font400 style={styles.total}>{total}</Font400>
+              <Font600 style={styles.right}>{marks + '/'}</Font600>
+              <Font400 style={styles.total}>{total * 2}</Font400>
             </View>
             <Font400 style={styles.scoreContainerText}>{'Total Marks'}</Font400>
           </View>

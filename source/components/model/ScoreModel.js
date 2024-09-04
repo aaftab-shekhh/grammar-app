@@ -11,19 +11,21 @@ import {Modal, Pressable, StyleSheet, View} from 'react-native';
 import {colors} from '../../constants/colors';
 import Font400 from '../font/Font400';
 import Font600 from '../font/Font600';
+import FastImage from 'react-native-fast-image';
+import {images} from '../../assets';
 
 const ScoreModel = forwardRef(({title, right, wrong, total}, ref) => {
   const [visible, setVisible] = useState(false);
 
   const {goBack} = useNavigation();
 
-  useEffect(() => {
-    if (visible) {
-      setTimeout(() => {
-        close();
-      }, 3000);
-    }
-  }, [visible]);
+  // useEffect(() => {
+  //   if (visible) {
+  //     setTimeout(() => {
+  //       close();
+  //     }, 3000);
+  //   }
+  // }, [visible]);
 
   const close = useCallback(() => {
     goBack();
@@ -47,8 +49,15 @@ const ScoreModel = forwardRef(({title, right, wrong, total}, ref) => {
       visible={visible}
       statusBarTranslucent={true}
       animationType="fade">
-      <Pressable onPress={close} style={styles.model}>
-        <Pressable onPress={() => {}} style={styles.container}>
+      <View style={styles.model}>
+        <View style={styles.container}>
+          <Pressable onPress={close} style={styles.closeIconContainer}>
+            <FastImage
+              source={images.close}
+              resizeMode="contain"
+              style={styles.closeIcon}
+            />
+          </Pressable>
           <Font600 style={styles.title}>{title}</Font600>
           <View style={styles.detail}>
             <View style={styles.cardContainer}>
@@ -73,8 +82,8 @@ const ScoreModel = forwardRef(({title, right, wrong, total}, ref) => {
               </Font400>
             </View>
           </View>
-        </Pressable>
-      </Pressable>
+        </View>
+      </View>
     </Modal>
   );
 });
@@ -94,6 +103,17 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 12,
     borderBottomRightRadius: 12,
     backgroundColor: colors.white,
+  },
+  closeIconContainer: {
+    padding: 5,
+    position: 'absolute',
+    right: 10,
+    top: 10,
+    zIndex: 1,
+  },
+  closeIcon: {
+    height: 15,
+    width: 15,
   },
   title: {
     fontSize: 20,

@@ -13,6 +13,7 @@ import {colors} from '../constants/colors';
 import {deviceWidth} from '../constants/constants';
 import {get_data} from '../utils/api';
 import {useSelector} from 'react-redux';
+import BannerADs from '../components/styles/BannerADs';
 
 const LearnWithImages = ({route}) => {
   const route_data = route?.params;
@@ -140,11 +141,9 @@ const LearnWithImages = ({route}) => {
         style={{
           height: 52,
           justifyContent: 'center',
-          backgroundColor: colors.colorFF0E0E,
+          backgroundColor: colors.white,
         }}>
-        <Font700 style={{color: colors.white, textAlign: 'center'}}>
-          {'ADD'}
-        </Font700>
+        <BannerADs />
       </View>
     </View>
   );

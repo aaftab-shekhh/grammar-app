@@ -1,4 +1,7 @@
 {
   "name": "GrammarApp",
-  "displayName": "GrammarApp"
+  "displayName": "GrammarApp",
+  "react-native-google-mobile-ads": {
+    "android_app_id": "ca-app-pub-6464114688925756~4549370474"
+  }
 }

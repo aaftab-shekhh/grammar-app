@@ -9,6 +9,7 @@ import {colors} from '../constants/colors';
 import {screens} from '../constants/screens';
 import {error} from '../tost/error';
 import {get_mcq_test} from '../utils/api';
+import BannerADs from '../components/styles/BannerADs';
 
 const MCQListing = ({route}) => {
   const route_data = route?.params?.data;
@@ -21,6 +22,7 @@ const MCQListing = ({route}) => {
     try {
       setLoader(true);
       const response = await get_mcq_test(id);
+      console.log('response', response);
       setList(response?.data);
     } catch (err) {
       error(err);
@@ -75,11 +77,9 @@ const MCQListing = ({route}) => {
         style={{
           height: 52,
           justifyContent: 'center',
-          backgroundColor: colors.colorFF0E0E,
+          backgroundColor: colors.white,
         }}>
-        <Font700 style={{color: colors.white, textAlign: 'center'}}>
-          {'ADD'}
-        </Font700>
+        <BannerADs />
       </View>
     </View>
   );

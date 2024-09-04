@@ -1,4 +1,4 @@
-import {useNavigation} from '@react-navigation/native';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
 import React, {memo, useCallback, useEffect, useRef, useState} from 'react';
 import {Pressable, ScrollView, StyleSheet, View} from 'react-native';
 import FastImage from 'react-native-fast-image';
@@ -15,6 +15,21 @@ import {colors} from '../constants/colors';
 import {get_mcq_test_question} from '../utils/api';
 import {useSelector} from 'react-redux';
 import {error} from '../tost/error';
+import BannerADs from '../components/styles/BannerADs';
+import {
+  RewardedAd,
+  RewardedAdEventType,
+  TestIds,
+} from 'react-native-google-mobile-ads';
+
+const adUnitId = __DEV__
+  ? TestIds.REWARDED
+  : 'ca-app-pub-6464114688925756~4549370474';
+
+const rewarded = RewardedAd.createForAdRequest(adUnitId, {
+  requestNonPersonalizedAdsOnly: true,
+  keywords: ['fashion', 'clothing'],
+});
 
 const MSQQuestion = ({route}) => {
   const {title, category, category_name, type} = route?.params?.data;
@@ -162,9 +177,47 @@ const MSQQuestion = ({route}) => {
   const [rightAnswerCount, setRightAnswerCount] = useState(0);
   const [wrongAnswerCount, setWrongAnswerCount] = useState(0);
   const [skipAnswerCount, setSkipAnswerCount] = useState(0);
+  const [loaded, setLoaded] = useState(false);
+
+  const focus = useIsFocused();
 
   const questionModel = useRef();
   const scoreModel = useRef();
+
+  useEffect(() => {
+    if (!focus) {
+      setLoaded(false);
+    }
+  }, [focus]);
+
+  useEffect(() => {
+    try {
+      if (focus && !loaded) {
+        const unsubscribeLoaded = rewarded.addAdEventListener(
+          RewardedAdEventType.LOADED,
+          () => {
+            setLoaded(true);
+            console.log('loaded', true);
+          },
+        );
+        const unsubscribeEarned = rewarded.addAdEventListener(
+          RewardedAdEventType.EARNED_REWARD,
+          reward => {
+            console.log('User earned reward of ', reward);
+          },
+        );
+
+        rewarded.load();
+
+        return () => {
+          unsubscribeLoaded();
+          unsubscribeEarned();
+        };
+      }
+    } catch (err) {
+      console.log('err', err);
+    }
+  }, [loaded, focus]);
 
   useEffect(() => {
     if (
@@ -185,6 +238,12 @@ const MSQQuestion = ({route}) => {
     } else {
       questionModel?.current?.close();
       scoreModel?.current?.open();
+
+      try {
+        rewarded.show();
+      } catch (err) {
+        console.log('err', err);
+      }
     }
   }, [rightAnswerCount, wrongAnswerCount, skipAnswerCount, data]);
 
@@ -275,6 +334,12 @@ const MSQQuestion = ({route}) => {
   const onSubmitHandler = useCallback(() => {
     questionModel?.current?.close();
     scoreModel?.current?.open();
+
+    try {
+      rewarded.show();
+    } catch (err) {
+      console.log('err', err);
+    }
   }, []);
 
   return (
@@ -343,8 +408,7 @@ const MSQQuestion = ({route}) => {
                 ]}>
                 <View style={styles.answerTextContainer}>
                   <Font600 style={styles.answerText}>
-                    {/* {String.fromCharCode(65 + index) + '. ' + ele} */}
-                    {ele}
+                    {String.fromCharCode(65 + index) + '. ' + ele}
                   </Font600>
                 </View>
                 {selectedAnswer ? (
@@ -397,11 +461,9 @@ const MSQQuestion = ({route}) => {
         style={{
           height: 52,
           justifyContent: 'center',
-          backgroundColor: colors.colorFF0E0E,
+          backgroundColor: colors.white,
         }}>
-        <Font700 style={{color: colors.white, textAlign: 'center'}}>
-          {'ADD'}
-        </Font700>
+        <BannerADs />
       </View>
     </View>
   );

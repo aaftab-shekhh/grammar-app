@@ -98,9 +98,12 @@ export const get_mcq_test_question = async category => {
 };
 
 export const get_pdf = async () => {
+  const storeData = store.getState();
+
+  console.log('storeData.auth?.language');
   try {
     const main_response = await fetch(
-      'https://cl.englivia.com/api/pdf.php?type=2',
+      `https://cl.englivia.com/api/pdf.php?type=2&language=${storeData.auth?.user?.language}`,
     );
     const response = await main_response.json();
     return response;
@@ -122,9 +125,10 @@ export const get_mock_question = async id => {
 };
 
 export const get_sentence_structure = async () => {
+  const storeData = store.getState();
   try {
     const main_response = await fetch(
-      `https://cl.englivia.com/api/pdf.php?type=3`,
+      `https://cl.englivia.com/api/pdf.php?type=3&language=${storeData.auth?.user?.language}`,
     );
     const response = await main_response.json();
     return response;
