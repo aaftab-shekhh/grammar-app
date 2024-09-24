@@ -22,9 +22,8 @@ import {
   TestIds,
 } from 'react-native-google-mobile-ads';
 
-const adUnitId = __DEV__
-  ? TestIds.REWARDED
-  : 'ca-app-pub-6464114688925756~4549370474';
+const adUnitId = 'ca-app-pub-6464114688925756~4549370474';
+// const adUnitId = TestIds.REWARDED;
 
 const rewarded = RewardedAd.createForAdRequest(adUnitId, {
   requestNonPersonalizedAdsOnly: true,
@@ -364,7 +363,7 @@ const MSQQuestion = ({route}) => {
         extraHeight={33}>
         <Font600 style={styles.heading}>{title}</Font600>
       </CommonHead>
-      <View style={styles.container}>
+      <ScrollView style={styles.container}>
         <View style={styles.progressContainer}>
           {progress ? (
             <ProgressBar
@@ -435,7 +434,7 @@ const MSQQuestion = ({route}) => {
             </Font400>
           ) : null}
         </View>
-      </View>
+      </ScrollView>
       <View style={styles.buttonContainer}>
         <View />
 

@@ -1,4 +1,4 @@
-package com.grammarapp
+package com.englivia.quiz
 
 import android.app.Application
 import com.facebook.react.PackageList

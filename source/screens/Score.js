@@ -1,6 +1,13 @@
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import React, {memo, useCallback, useEffect, useRef, useState} from 'react';
-import {Animated, BackHandler, Pressable, StyleSheet, View} from 'react-native';
+import {
+  Alert,
+  Animated,
+  BackHandler,
+  Pressable,
+  StyleSheet,
+  View,
+} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import {images} from '../assets';
 import Font400 from '../components/font/Font400';
@@ -98,27 +105,34 @@ const Score = ({route}) => {
     return <QuestionItem data={{...item, index: index}} />;
   }, []);
 
-  useFocusEffect(
-    useCallback(() => {
-      const onBackPress = () => {
-        console.log('"first"', 'first');
-        navigate.bind(null, screens.SelectMock, {
-          category_name: 'SSC PYQ Test',
-          type: '4',
-        });
-      };
-      BackHandler.addEventListener('hardwareBackPress', onBackPress);
-      return () =>
-        BackHandler.removeEventListener('hardwareBackPress', onBackPress);
-    }, []),
-  );
+  useEffect(() => {
+    const backAction = () => {
+      navigate(screens.SelectMock, {
+        category_name: 'SSC PYQ Test',
+        type: '4',
+      });
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+
+    return () => backHandler.remove();
+  }, []);
 
   const marks = right * 2 - wrong * 0.5;
 
   return (
     <View style={styles.root}>
       <CommonHead
-        leftIcon={images.arrow_left}
+        leftIconStyle={{height: 12, width: 12}}
+        leftButtonProps={{tintColor: colors.white}}
+        leftIcon={images.close}
+        leftButtonStyle={{
+          backgroundColor: colors.colorF90000,
+        }}
         onPressLeft={navigate.bind(null, screens.SelectMock, {
           category_name: 'SSC PYQ Test',
           type: '4',

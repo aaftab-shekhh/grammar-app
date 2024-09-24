@@ -19,6 +19,7 @@ import {update_user} from '../../redux/store';
 import {get_data, get_token} from '../../utils/api';
 import Font400 from '../font/Font400';
 import Font700 from '../font/Font700';
+import {error} from '../../tost/error';
 
 const LanguageChoiceModel = forwardRef((_, ref) => {
   const user = useSelector(state => state?.auth);
@@ -57,7 +58,9 @@ const LanguageChoiceModel = forwardRef((_, ref) => {
     try {
       const response = await get_data(data);
       setData(response?.data);
-    } catch (error) {
+    } catch (err) {
+      error(err);
+      console.log('err', err);
     } finally {
       setLoader(false);
     }
@@ -71,7 +74,7 @@ const LanguageChoiceModel = forwardRef((_, ref) => {
       setLoader(true);
       const response = await get_token();
       dispatch(update_user({access_token: response}));
-      getData();
+      await getData();
     } catch (e) {
       error(e);
     } finally {

@@ -1,5 +1,5 @@
 import React, {memo} from 'react';
-import {Pressable, StyleSheet, View} from 'react-native';
+import {Image, Pressable, StyleSheet, View} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import LinearGradient from 'react-native-linear-gradient';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -16,6 +16,8 @@ const CommonHead = props => {
     title,
     children,
     extraHeight = 0,
+    leftButtonStyle,
+    leftButtonProps,
   } = props;
 
   const {top} = useSafeAreaInsets();
@@ -27,11 +29,12 @@ const CommonHead = props => {
         {leftIcon ? (
           <Pressable
             onPress={onPressLeft}
-            style={[styles.button, styles.leftButton]}>
-            <FastImage
+            style={[styles.button, styles.leftButton, leftButtonStyle]}>
+            <Image
               style={[styles.icon, leftIconStyle]}
               source={leftIcon}
               resizeMode="contain"
+              {...leftButtonProps}
             />
           </Pressable>
         ) : (

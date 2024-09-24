@@ -6,6 +6,7 @@ export const get_token = async () => {
       'https://cl.englivia.com/generate_token.php',
     );
     const response = await main_response.json();
+
     return response;
   } catch (error) {
     throw error;
@@ -43,6 +44,7 @@ export const get_data = async data => {
     }
 
     const main_response = await response.json();
+    console.log('main_response', main_response);
     return main_response;
   } catch (error) {
     throw error;
@@ -138,9 +140,10 @@ export const get_sentence_structure = async () => {
 };
 
 export const get_paragraph_translation = async () => {
+  const storeData = store.getState();
   try {
     const main_response = await fetch(
-      `https://cl.englivia.com/api/translation/paragraph.php`,
+      `https://cl.englivia.com/api/translation/oneliner-pdf.php?language=${storeData.auth?.user?.language}`,
     );
     const response = await main_response.json();
     return response;
@@ -150,9 +153,10 @@ export const get_paragraph_translation = async () => {
 };
 
 export const get_translation_one_liner = async () => {
+  const storeData = store.getState();
   try {
     const main_response = await fetch(
-      `https://cl.englivia.com/api/translation/one-liner.php`,
+      `https://cl.englivia.com/api/translation/paragraph-pdf.php?language=${storeData.auth?.user?.language}`,
     );
     const response = await main_response.json();
     return response;

@@ -43,7 +43,7 @@ const Root = () => {
     try {
       setLoader(true);
       const response = await get_token();
-      console.log('response', response)
+      console.log('response', response);
       dispatch(update_user({access_token: response}));
     } catch (e) {
       error(e);
@@ -73,7 +73,9 @@ const Root = () => {
         <Stack.Screen
           name={screens.MockTest}
           component={MockTest}
-          options={{gestureEnabled: false}}
+          options={{
+            gestureEnabled: false,
+          }}
         />
         <Stack.Screen
           name={screens.LearnWithImages}
@@ -88,13 +90,12 @@ const Root = () => {
         <Stack.Screen name={screens.MonthListing} component={MonthListing} />
         <Stack.Screen name={screens.MSQQuestion} component={MSQQuestion} />
         <Stack.Screen
-          options={{
-            gestureEnabled: false,
-            swipeEnabled: false,
-            // animation: 'slide_from_bottom',
-          }}
           name={screens.Score}
           component={Score}
+          options={{
+            gestureEnabled: false,
+            animation: 'slide_from_left',
+          }}
         />
         <Stack.Screen
           name={screens.TermsConditions}

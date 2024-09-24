@@ -9,6 +9,7 @@ import {useNavigation} from '@react-navigation/native';
 import RatingModel from '../components/model/RatingModel';
 import {screens} from '../constants/screens';
 import TostModel from '../components/model/TostModel';
+import hardSet from 'redux-persist/es/stateReconciler/hardSet';
 
 const Setting = () => {
   const {goBack, navigate} = useNavigation();
@@ -141,7 +142,7 @@ Download "Grammar Pro: English Learning" today and start your journey towards En
       <CommonHead
         rightIcon={images.arrow_right}
         title={'Englivia'}
-        extraHeight={53}
+        extraHeight={63}
         onPressRight={goBack}>
         <Font700 style={styles.title}>{'Settings'}</Font700>
       </CommonHead>
@@ -154,8 +155,8 @@ Download "Grammar Pro: English Learning" today and start your journey towards En
           <View
             style={{
               height: 1,
-              backgroundColor: colors.color616161,
               marginHorizontal: 4,
+              backgroundColor: colors.color616161,
             }}
           />
         }
@@ -171,6 +172,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     paddingTop: 50,
     color: colors.white,
+    paddingHorizontal: 10,
   },
   container: {
     marginTop: 12,

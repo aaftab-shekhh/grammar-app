@@ -20,7 +20,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginHorizontal: 4,
     alignItems: 'center',
-    paddingVertical: 4,
+    paddingVertical: 14,
+    paddingHorizontal: 10,
   },
   icon: {
     height: 33,
@@ -28,7 +29,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 24,
-    paddingHorizontal: 8,
+    paddingHorizontal: 12,
     color: colors.color616161,
   },
 });

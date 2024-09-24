@@ -1,5 +1,5 @@
 import {StatusBar, StyleSheet, Text, View} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {memo, useEffect, useState} from 'react';
 import Root from './source/stacks/Root';
 import {colors} from './source/constants/colors';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
@@ -12,9 +12,9 @@ import {
   TestIds,
 } from 'react-native-google-mobile-ads';
 
-const adUnitId = __DEV__
-  ? TestIds.INTERSTITIAL
-  : 'ca-app-pub-6464114688925756~4549370474';
+const adUnitId = 'ca-app-pub-6464114688925756~4549370474';
+
+// const adUnitId = TestIds.INTERSTITIAL;
 
 const interstitial = InterstitialAd.createForAdRequest(adUnitId, {
   keywords: ['fashion', 'clothing'],
@@ -26,26 +26,25 @@ const App = () => {
 
   useEffect(() => {
     if (!addLoad) {
-      const unsubscribe = interstitial.addAdEventListener(
-        AdEventType.LOADED,
-        () => {
-          setAddLoaded(true);
-        },
-      );
-      interstitial.load();
-      return unsubscribe;
+      try {
+        const unsubscribe = interstitial.addAdEventListener(
+          AdEventType.LOADED,
+          () => {
+            setAddLoaded(true);
+          },
+        );
+        interstitial.load();
+        return unsubscribe;
+      } catch (err) {
+        console.log('err', err);
+      }
     }
   }, [addLoad]);
 
   useEffect(() => {
     if (addLoad && !loaded) {
-      try {
-        setLoaded(true);
-        console.log('"first"', 'first');
-        interstitial.show();
-      } catch (err) {
-        console.log('err', err);
-      }
+      setLoaded(true);
+      interstitial.show();
     }
   }, [loaded, addLoad]);
 
@@ -65,6 +64,6 @@ const App = () => {
   );
 };
 
-export default App;
+export default memo(App);
 
 const styles = StyleSheet.create({});
