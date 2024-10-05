@@ -16,6 +16,7 @@ import {
 } from '../utils/api';
 import {error} from '../tost/error';
 import BannerADs from '../components/styles/BannerADs';
+import EmptyList from '../components/list/EmptyList';
 
 const MonthListing = ({route}) => {
   const [list, setList] = useState([]);
@@ -25,6 +26,8 @@ const MonthListing = ({route}) => {
 
   const {id, category_name, screens_form, type} = route_data;
 
+  console.log('screens_form', screens_form);
+
   const getList = useCallback(async () => {
     try {
       setLoader(true);
@@ -32,37 +35,47 @@ const MonthListing = ({route}) => {
         const response = await get_pdf();
 
         setList(
-          response?.data?.map(ele => {
-            return {...ele, title: ele?.category_name};
-          }),
+          response?.data
+            ? response?.data?.map(ele => {
+                return {...ele, title: ele?.category_name};
+              })
+            : [],
         );
       } else if (screens_form === screens.MCQListing && type === '5') {
         const response = await get_mcq();
         setList(
-          response?.data?.map(ele => {
-            return {...ele, title: ele?.category_name};
-          }),
+          response?.data
+            ? response?.data?.map(ele => {
+                return {...ele, title: ele?.category_name};
+              })
+            : [],
         );
       } else if (type === '6') {
-        const response = await get_translation_one_liner();
-        setList(
-          response?.data?.map(ele => {
-            return {...ele, title: ele?.category_name};
-          }),
-        );
-      } else if (type === '7') {
         const response = await get_paragraph_translation();
         setList(
-          response?.data?.map(ele => {
-            return {...ele, title: ele?.category_name};
-          }),
+          response?.data
+            ? response?.data?.map(ele => {
+                return {...ele, title: ele?.category_name};
+              })
+            : [],
+        );
+      } else if (type === '7') {
+        const response = await get_translation_one_liner();
+        setList(
+          response?.data
+            ? response?.data?.map(ele => {
+                return {...ele, title: ele?.category_name};
+              })
+            : [],
         );
       } else if (type === '8') {
         const response = await get_sentence_structure();
         setList(
-          response?.data?.map(ele => {
-            return {...ele, title: ele?.category_name};
-          }),
+          response?.data
+            ? response?.data?.map(ele => {
+                return {...ele, title: ele?.category_name};
+              })
+            : [w],
         );
       }
     } catch (err) {
@@ -81,6 +94,8 @@ const MonthListing = ({route}) => {
   const renderItemHandler = useCallback(
     ({item}) => {
       const {no_of, title, pdf} = item;
+
+      console.log('screens_form', screens_form);
 
       const onNavigateScreen = () => {
         navigate(screens_form, {
@@ -115,15 +130,10 @@ const MonthListing = ({route}) => {
         showsVerticalScrollIndicator={false}
         keyExtractor={(_, index) => index?.toString()}
         ItemSeparatorComponent={<View style={{height: 12}} />}
+        ListEmptyComponent={
+          <EmptyList loader={loader} message={'Data not available'} />
+        }
       />
-      <View
-        style={{
-          height: 52,
-          justifyContent: 'center',
-          backgroundColor: colors.white,
-        }}>
-        <BannerADs />
-      </View>
     </View>
   );
 };

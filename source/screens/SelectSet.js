@@ -10,6 +10,7 @@ import {get_data} from '../utils/api';
 import {useSelector} from 'react-redux';
 import {screens} from '../constants/screens';
 import BannerADs from '../components/styles/BannerADs';
+import EmptyList from '../components/list/EmptyList';
 
 const SelectSet = ({route}) => {
   const route_data = route?.params;
@@ -68,9 +69,9 @@ const SelectSet = ({route}) => {
       const response = await get_data(data);
 
       if (type === '1') {
-        setList(sortBySubcategoryName(response?.data));
+        setList(sortBySubcategoryName(response?.data ? response?.data : []));
       } else {
-        setList(sortByTitle(response?.data));
+        setList(sortByTitle(response?.data ? response?.data : []));
       }
     } catch (error) {
     } finally {
@@ -125,15 +126,10 @@ const SelectSet = ({route}) => {
         showsVerticalScrollIndicator={false}
         keyExtractor={(_, index) => index?.toString()}
         ItemSeparatorComponent={<View style={{height: 12}} />}
+        ListEmptyComponent={
+          <EmptyList loader={loader} message={'Data not available'} />
+        }
       />
-      <View
-        style={{
-          height: 52,
-          justifyContent: 'center',
-          backgroundColor: colors.white,
-        }}>
-        <BannerADs />
-      </View>
     </View>
   );
 };

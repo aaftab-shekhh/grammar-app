@@ -2,14 +2,14 @@ import {useNavigation} from '@react-navigation/native';
 import React, {memo, useCallback, useEffect, useState} from 'react';
 import {FlatList, StyleSheet, View} from 'react-native';
 import {images} from '../assets';
-import Font700 from '../components/font/Font700';
 import SelectItem from '../components/items/SelectItem';
+import BannerADs from '../components/styles/BannerADs';
 import CommonHead from '../components/styles/CommonHead';
 import {colors} from '../constants/colors';
 import {screens} from '../constants/screens';
 import {error} from '../tost/error';
 import {get_mcq_test} from '../utils/api';
-import BannerADs from '../components/styles/BannerADs';
+import EmptyList from '../components/list/EmptyList';
 
 const MCQListing = ({route}) => {
   const route_data = route?.params?.data;
@@ -22,8 +22,8 @@ const MCQListing = ({route}) => {
     try {
       setLoader(true);
       const response = await get_mcq_test(id);
-      console.log('response', response);
-      setList(response?.data);
+      console.log('id', id);
+      setList(response?.data ? response?.data : []);
     } catch (err) {
       error(err);
     } finally {
@@ -72,15 +72,10 @@ const MCQListing = ({route}) => {
         showsVerticalScrollIndicator={false}
         keyExtractor={(_, index) => index?.toString()}
         ItemSeparatorComponent={<View style={{height: 12}} />}
+        ListEmptyComponent={
+          <EmptyList loader={loader} message={'Data not available'} />
+        }
       />
-      <View
-        style={{
-          height: 52,
-          justifyContent: 'center',
-          backgroundColor: colors.white,
-        }}>
-        <BannerADs />
-      </View>
     </View>
   );
 };

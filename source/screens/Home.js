@@ -9,6 +9,7 @@ import LanguageChoiceModel from '../components/model/LanguageChoiceModel';
 import LogoModel from '../components/model/LogoModel';
 import CommonHead from '../components/styles/CommonHead';
 import {screens} from '../constants/screens';
+import {colors} from '../constants/colors';
 
 const Home = () => {
   const {navigate} = useNavigation();

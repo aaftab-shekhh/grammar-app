@@ -44,7 +44,6 @@ export const get_data = async data => {
     }
 
     const main_response = await response.json();
-    console.log('main_response', main_response);
     return main_response;
   } catch (error) {
     throw error;
@@ -64,9 +63,12 @@ export const get_mock = async () => {
 };
 
 export const get_mcq = async () => {
+  const storeData = store.getState();
+
   try {
     const main_response = await fetch(
-      'https://cl.englivia.com/api/category.php?type=2',
+      // `https://cl.englivia.com/api/category.php?type=2?language=${storeData.auth?.user?.language}`,
+      `https://cl.englivia.com/api/category.php?type=2&language=${storeData.auth?.user?.language}`,
     );
     const response = await main_response.json();
     return response;
@@ -76,6 +78,10 @@ export const get_mcq = async () => {
 };
 
 export const get_mcq_test = async category => {
+  console.log(
+    `https://cl.englivia.com/api/subcategory.php?type=2&category=${category}`,
+  );
+
   try {
     const main_response = await fetch(
       `https://cl.englivia.com/api/subcategory.php?type=2&category=${category}`,
@@ -88,6 +94,7 @@ export const get_mcq_test = async category => {
 };
 
 export const get_mcq_test_question = async category => {
+  console.log('category', category)
   try {
     const main_response = await fetch(
       `https://cl.englivia.com/api/question.php?type=2&category=${category}`,
@@ -102,7 +109,6 @@ export const get_mcq_test_question = async category => {
 export const get_pdf = async () => {
   const storeData = store.getState();
 
-  console.log('storeData.auth?.language');
   try {
     const main_response = await fetch(
       `https://cl.englivia.com/api/pdf.php?type=2&language=${storeData.auth?.user?.language}`,

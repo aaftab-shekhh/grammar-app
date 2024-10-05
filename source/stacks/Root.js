@@ -28,6 +28,7 @@ import {error} from '../tost/error';
 import {get_token} from '../utils/api';
 import MSQQuestion from '../screens/MSQQuestion';
 import Score from '../screens/Score';
+import BannerADs from '../components/styles/BannerADs';
 
 const Stack = createNativeStackNavigator();
 
@@ -43,7 +44,6 @@ const Root = () => {
     try {
       setLoader(true);
       const response = await get_token();
-      console.log('response', response);
       dispatch(update_user({access_token: response}));
     } catch (e) {
       error(e);
@@ -113,6 +113,14 @@ const Root = () => {
         />
       </Stack.Navigator>
       <View style={{height: bottom, backgroundColor: colors.black}} />
+      <View
+        style={{
+          height: 52,
+          justifyContent: 'center',
+          backgroundColor: colors.white,
+        }}>
+        <BannerADs />
+      </View>
     </NavigationContainer>
   );
 };

@@ -1,12 +1,14 @@
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import React, {memo, useCallback, useEffect, useRef, useState} from 'react';
-import {Animated, Pressable, ScrollView, StyleSheet, View} from 'react-native';
-import FastImage from 'react-native-fast-image';
 import {
-  RewardedAd,
-  RewardedAdEventType,
-  TestIds,
-} from 'react-native-google-mobile-ads';
+  Animated,
+  BackHandler,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  View,
+} from 'react-native';
+import {AdEventType, InterstitialAd} from 'react-native-google-mobile-ads';
 import {images} from '../assets';
 import Font400 from '../components/font/Font400';
 import Font500 from '../components/font/Font500';
@@ -14,19 +16,17 @@ import Font600 from '../components/font/Font600';
 import Font700 from '../components/font/Font700';
 import QuestionSubmitModel from '../components/model/QuestionSubmitModel';
 import TostModel from '../components/model/TostModel';
-import BannerADs from '../components/styles/BannerADs';
 import Button from '../components/styles/Button';
 import CommonHead from '../components/styles/CommonHead';
 import ProgressBar from '../components/styles/ProgressBar';
 import {colors} from '../constants/colors';
 import {screens} from '../constants/screens';
 import {get_mock_question} from '../utils/api';
+import EmptyList from '../components/list/EmptyList';
 
-const adUnitId =  'ca-app-pub-6464114688925756~4549370474'
-// const adUnitId = TestIds.REWARDED;
+const adUnitId = 'ca-app-pub-6464114688925756/5287737073';
 
-const rewarded = RewardedAd.createForAdRequest(adUnitId, {
-  requestNonPersonalizedAdsOnly: true,
+const interstitial = InterstitialAd.createForAdRequest(adUnitId, {
   keywords: ['fashion', 'clothing'],
 });
 
@@ -77,39 +77,25 @@ const MockTest = ({route}) => {
   ]);
 
   useEffect(() => {
-    if (!focus) {
-      setLoaded(false);
-    }
-  }, [focus]);
-
-  useEffect(() => {
     try {
-      if (focus && !loaded) {
-        const unsubscribeLoaded = rewarded.addAdEventListener(
-          RewardedAdEventType.LOADED,
-          () => {
-            setLoaded(true);
-            console.log('loaded', true);
-          },
-        );
-        const unsubscribeEarned = rewarded.addAdEventListener(
-          RewardedAdEventType.EARNED_REWARD,
-          reward => {
-            console.log('User earned reward of ', reward);
-          },
-        );
+      console.log('"LOADING"', 'LOADING');
+      const unsubscribe = interstitial.addAdEventListener(
+        AdEventType.LOADED,
+        () => {
+          console.log('"LOAD"', 'LOAD');
+          setLoaded(true);
+        },
+      );
 
-        rewarded.load();
+      // Start loading the interstitial straight away
+      interstitial.load();
 
-        return () => {
-          unsubscribeLoaded();
-          unsubscribeEarned();
-        };
-      }
+      // Unsubscribe from events on unmount
+      return unsubscribe;
     } catch (err) {
       console.log('err', err);
     }
-  }, [loaded, focus]);
+  }, []);
 
   const onSubmit = useCallback(() => {
     if (
@@ -125,12 +111,6 @@ const MockTest = ({route}) => {
       questionModel?.current?.close();
       // scoreModel?.current?.open();
 
-      try {
-        rewarded.show();
-      } catch (err) {
-        console.log('err', err);
-      }
-
       andTestModel?.current?.close();
       navigate(screens.Score, {
         right: rightAnswerCount,
@@ -139,6 +119,14 @@ const MockTest = ({route}) => {
         title: 'Result : ' + category_name,
         list: data,
       });
+
+      try {
+        if (loaded) {
+          interstitial?.show();
+        }
+      } catch (err) {
+        console.log('err', err);
+      }
     }
   }, [
     rightAnswerCount,
@@ -146,6 +134,7 @@ const MockTest = ({route}) => {
     skipAnswerCount,
     data,
     questionCompleted,
+    loaded,
   ]);
 
   const getData = useCallback(async () => {
@@ -272,12 +261,6 @@ const MockTest = ({route}) => {
     // questionModel?.current?.close();
     // scoreModel?.current?.open();
 
-    try {
-      rewarded.show();
-    } catch (err) {
-      console.log('err', err);
-    }
-
     andTestModel?.current?.close();
     navigate(screens.Score, {
       right: rightAnswerCount,
@@ -286,7 +269,15 @@ const MockTest = ({route}) => {
       title: 'Result : ' + category_name,
       list: data,
     });
-  }, [rightAnswerCount, wrongAnswerCount, data, category_name]);
+    try {
+      if (loaded) {
+        interstitial?.show();
+        return null;
+      }
+    } catch (err) {
+      console.log('err', err);
+    }
+  }, [rightAnswerCount, wrongAnswerCount, data, category_name, loaded]);
 
   const formatTime = milliseconds => {
     const seconds = Math.floor(milliseconds / 1000);
@@ -329,6 +320,44 @@ const MockTest = ({route}) => {
     });
   };
 
+  useEffect(() => {
+    if (!focus) return;
+
+    const backAction = () => {
+      try {
+        if (!loaded) {
+          return null;
+        }
+        interstitial?.show();
+      } catch (err) {
+        console.log('err', err);
+      }
+      goBack();
+      setData();
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+
+    return () => backHandler.remove();
+  }, [focus, loaded]);
+
+  const onGoBack = useCallback(() => {
+    try {
+      if (!loaded) {
+        return null;
+      }
+      interstitial?.show();
+      goBack();
+      setData();
+    } catch (err) {
+      console.log('err', err);
+    }
+  }, [loaded]);
+
   return (
     <View style={styles.root}>
       <QuestionSubmitModel
@@ -354,7 +383,7 @@ const MockTest = ({route}) => {
       />
       <CommonHead
         leftIcon={images.arrow_left}
-        onPressLeft={goBack}
+        onPressLeft={onGoBack}
         title={category_name}
         extraHeight={33}>
         <Font600 style={styles.heading}>{formatTime(remainingTime)}</Font600>
@@ -374,70 +403,75 @@ const MockTest = ({route}) => {
       {/* showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.container}
         bounces={false} */}
-
-      <ScrollView style={styles.container}>
-        <View style={styles.progressContainer}>
-          {progress ? (
-            <ProgressBar
-              height={40}
-              progress={progress}
-              barColor={colors.color228ED5}
-              backgroundColor={colors.colorC0DFF7}
-              totalQuestion={data.length}
-              completedQuestion={currentIndex + 1}
-            />
-          ) : null}
-        </View>
-        <View style={styles.markContainer}>
-          <Animated.View
-            style={[
-              styles.markDetailContainer,
-              {transform: [{translateX: animationCorrect}]},
-            ]}>
-            <Font500 style={styles.markDetail}>{'+2 For correct'}</Font500>
-          </Animated.View>
-          <Animated.View
-            style={[
-              styles.markDetailContainer,
-              {transform: [{translateX: animationIncorrect}]},
-            ]}>
-            <Font500 style={styles.markDetail}>{'-0.5 For incorrect'}</Font500>
-          </Animated.View>
-          <Pressable onPress={handlePressForCorrect} style={styles.mark}>
-            <Font400 style={styles.markText}>{'+2'}</Font400>
-          </Pressable>
-          <Pressable onPress={handlePressForIncorrect} style={styles.mark}>
-            <Font400 style={styles.markText}>{'-0.5'}</Font400>
-          </Pressable>
-        </View>
-        <View style={styles.questionContainer}>
-          {data[currentIndex]?.question ? (
-            <Font600 style={styles.questionTitle}>
-              {data[currentIndex]?.question}
-            </Font600>
-          ) : null}
-        </View>
-        <View style={styles.answerContainer}>
-          {option_array?.map((ele, index) => {
-            if (!ele) return null;
-            return (
-              <Pressable
-                key={index}
-                onPress={setSelectedAnswerHandler.bind(null, ele)}
+      {loader || !loaded ? (
+        <EmptyList loader={loader || !loaded} message={'No Data Available'} />
+      ) : (
+        <>
+          <ScrollView style={styles.container}>
+            <View style={styles.progressContainer}>
+              {progress ? (
+                <ProgressBar
+                  height={40}
+                  progress={progress}
+                  barColor={colors.color228ED5}
+                  backgroundColor={colors.colorC0DFF7}
+                  totalQuestion={data.length}
+                  completedQuestion={currentIndex + 1}
+                />
+              ) : null}
+            </View>
+            <View style={styles.markContainer}>
+              <Animated.View
                 style={[
-                  styles.answer,
-                  selectedAnswer
-                    ? selectedAnswer === ele
-                      ? styles.rightAnswer
-                      : null
-                    : null,
+                  styles.markDetailContainer,
+                  {transform: [{translateX: animationCorrect}]},
                 ]}>
-                <View style={styles.answerTextContainer}>
-                  <Font600 style={styles.answerText}>
-                    {String.fromCharCode(65 + index) + '. ' + ele}
-                  </Font600>
-                </View>
-                {/* {selectedAnswer ? (
+                <Font500 style={styles.markDetail}>{'+2 For correct'}</Font500>
+              </Animated.View>
+              <Animated.View
+                style={[
+                  styles.markDetailContainer,
+                  {transform: [{translateX: animationIncorrect}]},
+                ]}>
+                <Font500 style={styles.markDetail}>
+                  {'-0.5 For incorrect'}
+                </Font500>
+              </Animated.View>
+              <Pressable onPress={handlePressForCorrect} style={styles.mark}>
+                <Font400 style={styles.markText}>{'+2'}</Font400>
+              </Pressable>
+              <Pressable onPress={handlePressForIncorrect} style={styles.mark}>
+                <Font400 style={styles.markText}>{'-0.5'}</Font400>
+              </Pressable>
+            </View>
+            <View style={styles.questionContainer}>
+              {data[currentIndex]?.question ? (
+                <Font600 style={styles.questionTitle}>
+                  {data[currentIndex]?.question}
+                </Font600>
+              ) : null}
+            </View>
+            <View style={styles.answerContainer}>
+              {option_array?.map((ele, index) => {
+                if (!ele) return null;
+                return (
+                  <Pressable
+                    key={index}
+                    onPress={setSelectedAnswerHandler.bind(null, ele)}
+                    style={[
+                      styles.answer,
+                      selectedAnswer
+                        ? selectedAnswer === ele
+                          ? styles.rightAnswer
+                          : null
+                        : null,
+                    ]}>
+                    <View style={styles.answerTextContainer}>
+                      <Font600 style={styles.answerText}>
+                        {String.fromCharCode(65 + index) + '. ' + ele}
+                      </Font600>
+                    </View>
+                    {/* {selectedAnswer ? (
                     <FastImage
                       source={
                         selectedAnswer === ele ? images.correct_answer : null
@@ -446,49 +480,42 @@ const MockTest = ({route}) => {
                       resizeMode="contain"
                     />
                   ) : null} */}
-              </Pressable>
-            );
-          })}
-        </View>
-        <View style={styles.noteContainer}>
-          {data[currentIndex]?.note && selectedAnswer ? (
-            <Font400 style={styles.note}>
-              <Font700>{'Note :'}</Font700> {data[currentIndex]?.note}
-            </Font400>
+                  </Pressable>
+                );
+              })}
+            </View>
+            <View style={styles.noteContainer}>
+              {data[currentIndex]?.note && selectedAnswer ? (
+                <Font400 style={styles.note}>
+                  <Font700>{'Note :'}</Font700> {data[currentIndex]?.note}
+                </Font400>
+              ) : null}
+            </View>
+          </ScrollView>
+
+          <View style={styles.buttonContainer}>
+            <View />
+
+            {rightAnswerCount + wrongAnswerCount + skipAnswerCount <
+            data?.length ? (
+              <Button
+                onPress={onNextHandler}
+                iconStyle={styles.buttonIcon}
+                buttonStyle={styles.next}
+                icon={images.arrow_right}>
+                {selectedAnswer ? 'Next' : 'Skip'}
+              </Button>
+            ) : null}
+          </View>
+
+          {rightAnswerCount + wrongAnswerCount + skipAnswerCount >=
+            data?.length && data?.length !== 0 ? (
+            <Button onPress={onSubmit} buttonStyle={styles.submit}>
+              {'Submit'}
+            </Button>
           ) : null}
-        </View>
-      </ScrollView>
-
-      <View style={styles.buttonContainer}>
-        <View />
-
-        {rightAnswerCount + wrongAnswerCount + skipAnswerCount <
-        data?.length ? (
-          <Button
-            onPress={onNextHandler}
-            iconStyle={styles.buttonIcon}
-            buttonStyle={styles.next}
-            icon={images.arrow_right}>
-            {selectedAnswer ? 'Next' : 'Skip'}
-          </Button>
-        ) : null}
-      </View>
-
-      {rightAnswerCount + wrongAnswerCount + skipAnswerCount >= data?.length &&
-      data?.length !== 0 ? (
-        <Button onPress={onSubmit} buttonStyle={styles.submit}>
-          {'Submit'}
-        </Button>
-      ) : null}
-
-      <View
-        style={{
-          height: 52,
-          justifyContent: 'center',
-          backgroundColor: colors.white,
-        }}>
-        <BannerADs />
-      </View>
+        </>
+      )}
     </View>
   );
 };

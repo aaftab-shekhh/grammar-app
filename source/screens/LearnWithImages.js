@@ -1,7 +1,8 @@
-import {useNavigation} from '@react-navigation/native';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
 import React, {memo, useCallback, useEffect, useState} from 'react';
-import {ScrollView, StyleSheet, View} from 'react-native';
+import {BackHandler, ScrollView, StyleSheet, View} from 'react-native';
 import FastImage from 'react-native-fast-image';
+import {useSelector} from 'react-redux';
 import {images} from '../assets';
 import Font400 from '../components/font/Font400';
 import Font600 from '../components/font/Font600';
@@ -12,8 +13,14 @@ import CommonHead from '../components/styles/CommonHead';
 import {colors} from '../constants/colors';
 import {deviceWidth} from '../constants/constants';
 import {get_data} from '../utils/api';
-import {useSelector} from 'react-redux';
-import BannerADs from '../components/styles/BannerADs';
+import {AdEventType, InterstitialAd} from 'react-native-google-mobile-ads';
+import EmptyList from '../components/list/EmptyList';
+
+const adUnitId = 'ca-app-pub-6464114688925756/5287737073';
+
+const interstitial = InterstitialAd.createForAdRequest(adUnitId, {
+  keywords: ['fashion', 'clothing'],
+});
 
 const LearnWithImages = ({route}) => {
   const route_data = route?.params;
@@ -27,6 +34,48 @@ const LearnWithImages = ({route}) => {
 
   const [data, setData] = useState([]);
   const [loader, setLoader] = useState(false);
+  const [loaded, setLoaded] = useState(false);
+  const focus = useIsFocused();
+
+  useEffect(() => {
+    if (!focus) return;
+
+    const backAction = () => {
+      try {
+        if (!loaded) {
+          return null;
+        }
+        interstitial?.show();
+      } catch (err) {
+        console.log('err', err);
+      }
+      goBack();
+      setData();
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+
+    return () => backHandler.remove();
+  }, [focus, loaded]);
+
+  useEffect(() => {
+    const unsubscribe = interstitial.addAdEventListener(
+      AdEventType.LOADED,
+      () => {
+        setLoaded(true);
+      },
+    );
+
+    // Start loading the interstitial straight away
+    interstitial.load();
+
+    // Unsubscribe from events on unmount
+    return unsubscribe;
+  }, []);
 
   const getData = useCallback(async () => {
     const data = {
@@ -40,6 +89,7 @@ const LearnWithImages = ({route}) => {
       const response = await get_data(data);
       setData(response?.data);
     } catch (error) {
+      console.log('error', error);
     } finally {
       setLoader(false);
     }
@@ -57,8 +107,17 @@ const LearnWithImages = ({route}) => {
   }, [currentIndex, data]);
 
   const onFinishHandler = useCallback(() => {
-    goBack();
-  }, []);
+    try {
+      if (!loaded) {
+        return null;
+      }
+      interstitial?.show();
+      goBack();
+      setData();
+    } catch (err) {
+      console.log('err', err);
+    }
+  }, [loaded]);
 
   const onPrevHandler = useCallback(
     () => setCurrentIndex(prev => (prev >= 0 ? prev - 1 : prev)),
@@ -69,82 +128,82 @@ const LearnWithImages = ({route}) => {
     <View style={styles.root}>
       <CommonHead
         leftIcon={images.arrow_left}
-        onPressLeft={goBack}
+        onPressLeft={onFinishHandler}
         title={category_name}
         extraHeight={33}>
         <Font600 style={styles.heading}>{title}</Font600>
       </CommonHead>
 
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.container}>
-        <View style={styles.titleContainer}>
-          <Font700 style={styles.title}>{data[currentIndex]?.headline}</Font700>
-        </View>
-        <View style={styles.meaningContainer}>
-          <Font800 style={styles.meaningTitle}>{'Meaning : '}</Font800>
-          <Font400 style={styles.meaningContent}>
-            {data[currentIndex]?.headline_meaning}
-          </Font400>
-        </View>
-        <View style={styles.meaningContainer}>
-          <Font800 style={styles.meaningTitle}>{'Sentence : '}</Font800>
-          <Font400
-            style={[
-              styles.meaningContent,
-              {
-                color: colors.color4682B4,
-              },
-            ]}>
-            {data[currentIndex]?.detail}
-          </Font400>
-        </View>
-        <FastImage
-          source={{
-            uri: `https://cl.englivia.com/images/category/${data[currentIndex]?.image}`,
-          }}
-          resizeMode={'contain'}
-          style={styles.image}
-        />
-      </ScrollView>
+      {loader || !loaded ? (
+        <EmptyList loader={loader || !loaded} message={'No Data Available'} />
+      ) : (
+        <>
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={styles.container}>
+            <View style={styles.titleContainer}>
+              <Font700 style={styles.title}>
+                {data[currentIndex]?.headline}
+              </Font700>
+            </View>
+            <View style={styles.meaningContainer}>
+              <Font800 style={styles.meaningTitle}>{'Meaning : '}</Font800>
+              <Font400 style={styles.meaningContent}>
+                {data[currentIndex]?.headline_meaning}
+              </Font400>
+            </View>
+            <View style={styles.meaningContainer}>
+              <Font800 style={styles.meaningTitle}>{'Sentence : '}</Font800>
+              <Font400
+                style={[
+                  styles.meaningContent,
+                  {
+                    color: colors.color4682B4,
+                  },
+                ]}>
+                {data[currentIndex]?.detail}
+              </Font400>
+            </View>
+            <FastImage
+              source={{
+                uri: `https://cl.englivia.com/images/category/${data[currentIndex]?.image}`,
+              }}
+              resizeMode={'contain'}
+              style={styles.image}
+            />
+          </ScrollView>
 
-      <View style={styles.buttonContainer}>
-        {currentIndex !== 0 ? (
-          <Button
-            onPress={onPrevHandler}
-            iconStyle={styles.buttonIcon}
-            icon={images.arrow_left}>
-            {'Prev'}
-          </Button>
-        ) : (
-          <View />
-        )}
-        {currentIndex + 1 === data.length ? (
-          <Button
-            onPress={onFinishHandler}
-            iconStyle={styles.buttonIcon}
-            buttonStyle={styles.next}
-            icon={images.arrow_right}>
-            {'Finish'}
-          </Button>
-        ) : (
-          <Button
-            onPress={onNextHandler}
-            iconStyle={styles.buttonIcon}
-            buttonStyle={styles.next}
-            icon={images.arrow_right}>
-            {'Next'}
-          </Button>
-        )}
-      </View>
-      <View
-        style={{
-          height: 52,
-          justifyContent: 'center',
-          backgroundColor: colors.white,
-        }}>
-        <BannerADs />
-      </View>
+          <View style={styles.buttonContainer}>
+            {currentIndex !== 0 ? (
+              <Button
+                onPress={onPrevHandler}
+                iconStyle={styles.buttonIcon}
+                icon={images.arrow_left}>
+                {'Prev'}
+              </Button>
+            ) : (
+              <View />
+            )}
+            {currentIndex + 1 === data.length ? (
+              <Button
+                onPress={onFinishHandler}
+                iconStyle={styles.buttonIcon}
+                buttonStyle={styles.next}
+                icon={images.arrow_right}>
+                {'Finish'}
+              </Button>
+            ) : (
+              <Button
+                onPress={onNextHandler}
+                iconStyle={styles.buttonIcon}
+                buttonStyle={styles.next}
+                icon={images.arrow_right}>
+                {'Next'}
+              </Button>
+            )}
+          </View>
+        </>
+      )}
     </View>
   );
 };

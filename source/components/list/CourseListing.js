@@ -4,6 +4,7 @@ import {useSelector} from 'react-redux';
 import {colors} from '../../constants/colors';
 import {get_data} from '../../utils/api';
 import CourseItem from '../items/CourseItem';
+import EmptyList from './EmptyList';
 
 const CourseListing = () => {
   const [list, setList] = useState([]);
@@ -54,6 +55,9 @@ const CourseListing = () => {
       numColumns={3}
       scrollEnabled={false}
       contentContainerStyle={styles.root}
+      ListEmptyComponent={
+        <EmptyList loader={loader} message={'Data not available'} />
+      }
       renderItem={({item}) => <CourseItem data={item} />}
       keyExtractor={(_, index) => index?.toString()}
     />

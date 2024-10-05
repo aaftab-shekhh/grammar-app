@@ -10,6 +10,7 @@ import {colors} from '../constants/colors';
 import {get_mock} from '../utils/api';
 import {screens} from '../constants/screens';
 import BannerADs from '../components/styles/BannerADs';
+import EmptyList from '../components/list/EmptyList';
 
 const SelectMock = ({route}) => {
   const route_data = route?.params;
@@ -27,7 +28,7 @@ const SelectMock = ({route}) => {
       setLoader(true);
       const response = await get_mock();
 
-      setList(response?.data);
+      setList(response?.data ? response?.data : []);
     } catch (error) {
     } finally {
       setLoader(false);
@@ -75,15 +76,10 @@ const SelectMock = ({route}) => {
         showsVerticalScrollIndicator={false}
         keyExtractor={(_, index) => index?.toString()}
         ItemSeparatorComponent={<View style={{height: 12}} />}
+        ListEmptyComponent={
+          <EmptyList loader={loader} message={'Data not available'} />
+        }
       />
-      <View
-        style={{
-          height: 52,
-          justifyContent: 'center',
-          backgroundColor: colors.white,
-        }}>
-        <BannerADs />
-      </View>
     </View>
   );
 };

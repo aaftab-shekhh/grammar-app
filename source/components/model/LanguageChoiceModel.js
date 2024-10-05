@@ -60,7 +60,6 @@ const LanguageChoiceModel = forwardRef((_, ref) => {
       setData(response?.data);
     } catch (err) {
       error(err);
-      console.log('err', err);
     } finally {
       setLoader(false);
     }

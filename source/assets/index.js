@@ -22,7 +22,8 @@ export const images = {
   item_bg_cover_image: require('./Images/item_bg_cover_image.png'),
   add: require('./Images/add.png'),
   logo: require('./Images/logo.png'),
-  close: require('./Images/close.png'),
   mock: require('./Images/mock.png'),
+  empty: require('./Images/empty.png'),
+  close: require('./Images/close.png'),
   dropIcon: require('./Images/dropIcon.png'),
 };
