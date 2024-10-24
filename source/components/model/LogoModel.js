@@ -111,6 +111,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   closeContainer: {
+    padding: 10,
     position: 'absolute',
     right: 20,
     top: 20,

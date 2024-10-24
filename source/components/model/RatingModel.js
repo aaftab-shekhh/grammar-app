@@ -10,11 +10,22 @@ import {colors} from '../../constants/colors';
 import Font400 from '../font/Font400';
 import Font700 from '../font/Font700';
 import Button from '../styles/Button';
+import {useDispatch} from 'react-redux';
+import {update_decline_to_rating} from '../../redux/store';
 
-const RatingModel = forwardRef((props, ref) => {
+const RatingModel = forwardRef(({onShowExit}, ref) => {
   const [visible, setVisible] = useState(false);
 
-  const close = useCallback(() => setVisible(false), []);
+  const close = useCallback(() => {
+    setVisible(false);
+    if (onShowExit) {
+      setTimeout(() => {
+        onShowExit();
+      }, 300);
+    }
+  }, [onShowExit]);
+
+  const dispatch = useDispatch();
 
   useImperativeHandle(
     ref,
@@ -39,11 +50,13 @@ const RatingModel = forwardRef((props, ref) => {
             }
           </Font400>
           <Button
-            onPress={() =>
+            onPress={() => {
               Linking.openURL(
                 'https://play.google.com/store/apps/details?id=com.englivia.quiz',
-              )
-            }
+              );
+              dispatch(update_decline_to_rating());
+              setVisible(false);
+            }}
             buttonStyle={styles.button}>
             {'Sure, I Like It!'}
           </Button>
@@ -54,11 +67,15 @@ const RatingModel = forwardRef((props, ref) => {
             {'Maybe Later'}
           </Button>
           <Button
-            onPress={() =>
-              Linking.openURL(
-                'https://play.google.com/store/apps/details?id=com.englivia.quiz',
-              )
-            }
+            onPress={() => {
+              dispatch(update_decline_to_rating());
+              setVisible(false);
+              if (onShowExit) {
+                setTimeout(() => {
+                  onShowExit();
+                }, 300);
+              }
+            }}
             textStyle={styles.buttonText}
             buttonStyle={[
               styles.button,

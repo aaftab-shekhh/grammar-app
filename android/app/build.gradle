@@ -80,8 +80,8 @@ android {
         applicationId "com.englivia.quiz"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 18
-        versionName "4.0.2"
+        versionCode 23
+        versionName "4.0.4"
     }
     signingConfigs {
         debug {

@@ -11,6 +11,7 @@ const authSlice = createSlice({
   name: 'auth',
   initialState: {
     user: null,
+    decline_to_rating: false,
   },
 
   reducers: {
@@ -18,6 +19,9 @@ const authSlice = createSlice({
       state.user = state.user
         ? {...state.user, ...action.payload}
         : action.payload;
+    },
+    update_decline_to_rating: state => {
+      state.decline_to_rating = true;
     },
   },
 });
@@ -39,4 +43,4 @@ const store = configureStore({
 export default store;
 export const persistor = persistStore(store);
 
-export const {update_user} = authSlice.actions;
+export const {update_user, update_decline_to_rating} = authSlice.actions;

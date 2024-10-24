@@ -48,9 +48,6 @@ const MockTest = ({route}) => {
 
   const focus = useIsFocused();
 
-  const [clickedCorrect, setClickedCorrect] = useState(false);
-  const [clickedIncorrect, setClickedIncorrect] = useState(false);
-
   const animationCorrect = useRef(new Animated.Value(300)).current;
   const animationIncorrect = useRef(new Animated.Value(300)).current;
 

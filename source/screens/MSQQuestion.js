@@ -243,8 +243,7 @@ const MSQQuestion = ({route}) => {
     try {
       setLoader(true);
       const response = await get_mcq_test_question(id);
-
-      console.log('response', response);
+      console.log('response', response)
 
       const newData = response?.response?.map(item => {
         const options = [
@@ -254,11 +253,16 @@ const MSQQuestion = ({route}) => {
           item?.optiond,
         ];
 
-        const answer = item?.optiona;
+        const answer =
+          item?.answer?.toString()?.toLowerCase() === 'a'
+            ? item?.optiona
+            : item?.answer?.toString()?.toLowerCase() === 'b'
+            ? item?.optionb
+            : item?.answer?.toString()?.toLowerCase() === 'c'
+            ? item?.optionc
+            : item?.optiond;
 
         options.sort(() => Math.random() - 0.5);
-
-        const correctOptionIndex = options.indexOf(answer);
 
         return {
           ...item,
@@ -266,10 +270,9 @@ const MSQQuestion = ({route}) => {
           optionb: options[1],
           optionc: options[2],
           optiond: options[3],
-          answer: options[correctOptionIndex],
+          answer: answer,
         };
       });
-
       setData(newData);
     } catch (err) {
       error(err);
